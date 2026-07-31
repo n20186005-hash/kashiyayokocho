@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ame: #c94e36;
+  --color-kinako: #f8ead0;
+  --color-mizuame: #7aa37b;
+  --color-kokuto: #3f281b;
+  --color-noren: #693f28;
+  --color-sakura: #d68b91;
+  --font-sans: "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", Georgia, serif;
+}
+
+:root {
+  color-scheme: light;
+  --paper: #fff8ea;
+  --paper-deep: #f6e5c4;
+  --ink: #352113;
+  --muted: #7c6757;
+  --wood: #52321f;
+  --red: #b94732;
+  --green: #6d9071;
+  --gold: #d7a641;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(214, 139, 145, .24), transparent 26rem),
+    radial-gradient(circle at 82% 8%, rgba(215, 166, 65, .23), transparent 24rem),
+    linear-gradient(180deg, #fff8ea 0%, #f9efd9 48%, #fffaf0 100%);
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .22;
+  background-image:
+    linear-gradient(90deg, rgba(63, 40, 27, .05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(63, 40, 27, .04) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, #000, transparent 70%);
+  z-index: -1;
+}
+
+a { color: inherit; }
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: rgba(201, 78, 54, .22);
+}
+
+.container-page {
+  width: min(1180px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  letter-spacing: .04em;
+}
+
+.paper-card {
+  background: rgba(255, 252, 244, .9);
+  border: 1px solid rgba(105, 63, 40, .18);
+  box-shadow: 0 24px 80px rgba(63, 40, 27, .12);
+}
+
+.wood-card {
+  background:
+    linear-gradient(135deg, rgba(85, 50, 31, .95), rgba(59, 35, 22, .96)),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.04) 2px, transparent 2px, transparent 7px);
+  color: #fff8ea;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  border-radius: 999px;
+  background: var(--red);
+  color: #fff8ea;
+  padding: .86rem 1.15rem;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(185, 71, 50, .22);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 16px 36px rgba(185, 71, 50, .28); background: #9f3828; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(105, 63, 40, .28);
+  background: rgba(255, 248, 234, .78);
+  color: var(--wood);
+  padding: .82rem 1.08rem;
+  font-weight: 700;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.btn-secondary:hover { transform: translateY(-1px); border-color: rgba(185, 71, 50, .52); background: #fffaf1; }
+
+.site-nav-link[aria-current="page"] {
+  color: #fff !important;
+  background-color: #3f281b;
+  border-color: #3f281b;
+}
+
+.text-balance { text-wrap: balance; }
+
+.kashi-pattern {
+  position: relative;
+  overflow: hidden;
+}
+
+.kashi-pattern::after {
+  content: "";
+  position: absolute;
+  inset: auto -40px -60px auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 40% 40%, rgba(248, 234, 208, .8) 0 8%, transparent 9%),
+    radial-gradient(circle at 68% 50%, rgba(214, 139, 145, .6) 0 9%, transparent 10%),
+    radial-gradient(circle at 52% 75%, rgba(122, 163, 123, .65) 0 7%, transparent 8%);
+  opacity: .72;
+}
+
+.map-frame iframe {
+  width: 100%;
+  height: 440px;
+  border: 0;
+  display: block;
+  border-radius: 1.5rem;
+}
+
+@media (max-width: 760px) {
+  .container-page { width: min(100% - 22px, 1180px); }
+  .map-frame iframe { height: 340px; }
+}

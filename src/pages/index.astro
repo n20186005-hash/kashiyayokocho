@@ -1,0 +1,109 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import InfoPill from '@components/InfoPill.astro';
+import SpotCard from '@components/SpotCard.astro';
+import GoogleMap from '@components/GoogleMap.astro';
+import SaveButton from '@components/SaveButton.astro';
+import { site } from '@config/site';
+import { buildStructuredData, foods, highlights, nearbySpots, visitFacts, faq, modelPlans } from '@data/content';
+
+const title = '菓子屋横丁さんぽ手帖';
+const description = site.description;
+const structuredData = buildStructuredData('/', title, description);
+---
+<Layout title={title} description={description} structuredData={structuredData}>
+  <PageHero
+    title="小江戸川越、甘い香りの石畳へ。"
+    description="菓子屋横丁は、埼玉県川越市元町にある昔菓子の横丁。飴、せんべい、だんご、芋菓子の店先を眺めながら、時の鐘や蔵造りの町並みまで一筆書きで歩けます。"
+  />
+
+  <section class="container-page pb-16">
+    <div class="grid gap-4 md:grid-cols-3">
+      {highlights.map((item) => (
+        <article class="paper-card kashi-pattern rounded-[1.7rem] p-6">
+          <h2 class="font-serif text-2xl font-bold text-[var(--wood)]">{item.title}</h2>
+          <p class="mt-4 text-sm leading-7 text-[var(--muted)]">{item.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page grid gap-10 pb-20 lg:grid-cols-[.9fr_1.1fr]">
+    <div>
+      <SectionHeader eyebrow="BASIC" title="訪問前に知りたいこと" description="全体は小さな横丁ですが、店ごとの営業時間や休みが違います。目当ての店がある場合は直前確認がおすすめです。" />
+      <div class="flex flex-wrap gap-3">
+        <SaveButton id="kashiya-yokocho" title="菓子屋横丁" category="メイン" note="飴・せんべい・だんご・芋菓子を少しずつ。" />
+        <a href="/plan/" class="btn-secondary">保存リストを見る</a>
+      </div>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {visitFacts.map((fact) => <InfoPill label={fact.label} value={fact.value} />)}
+    </div>
+  </section>
+
+  <section class="bg-[rgba(63,40,27,.96)] py-20 text-[#fff8ea]">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[.78fr_1.22fr]">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">MODEL COURSE</p>
+          <h2 class="section-title mt-2 text-4xl font-black md:text-5xl">おすすめの回り方</h2>
+          <p class="mt-5 text-sm leading-8 text-[#f6ddb4]">短時間でも十分楽しい場所ですが、川越らしさを味わうなら「菓子屋横丁＋時の鐘＋蔵造りの町並み」をひとつの線で歩くのが自然です。</p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-3">
+          {modelPlans.map((plan) => (
+            <article class="rounded-[1.6rem] border border-white/12 bg-white/8 p-5">
+              <h3 class="font-serif text-2xl font-bold">{plan.title}</h3>
+              <ol class="mt-5 grid gap-3 text-sm leading-6 text-[#f6ddb4]">
+                {plan.points.map((point, index) => <li><span class="mr-2 font-bold text-[#f6c96b]">{index + 1}.</span>{point}</li>)}
+              </ol>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-20">
+    <SectionHeader eyebrow="FOOD" title="周辺グルメ" description="菓子屋横丁では甘いものを少しずつ。ランチや休憩は周辺のパン、ベーグル、うなぎ、和食を組み合わせると満足度が上がります。" />
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {foods.slice(0, 3).map((item) => <SpotCard item={item} />)}
+    </div>
+    <div class="mt-8"><a href="/food/" class="btn-primary">周辺グルメをもっと見る</a></div>
+  </section>
+
+  <section class="container-page pb-20">
+    <SectionHeader eyebrow="AROUND" title="周辺スポット" description="川越の定番スポットは徒歩圏にまとまっています。混雑日は早い時間に横丁、昼前後に周辺スポットへ回ると歩きやすいです。" />
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {nearbySpots.slice(0, 3).map((item) => <SpotCard item={item} />)}
+    </div>
+    <div class="mt-8"><a href="/nearby/" class="btn-secondary">周辺スポットを確認</a></div>
+  </section>
+
+  <section class="container-page grid gap-8 pb-20 lg:grid-cols-[.9fr_1.1fr]">
+    <div>
+      <SectionHeader eyebrow="MAP" title="Google マップ" description="埋め込み地図は日本語・日本地域パラメータに変更済みです。現地では路地が細いので、徒歩ナビの到着点を見ながら入り口を探すと安心です。" />
+      <div class="rounded-3xl bg-[rgba(201,78,54,.09)] p-5 text-sm leading-7 text-[var(--muted)]">
+        <p class="font-bold text-[var(--wood)]">住所</p>
+        <p class="mt-1">{site.address.full}</p>
+        <p class="mt-4 font-bold text-[var(--wood)]">座標</p>
+        <p class="mt-1">{site.latitude}, {site.longitude}</p>
+      </div>
+    </div>
+    <GoogleMap />
+  </section>
+
+  <section class="container-page pb-20">
+    <SectionHeader eyebrow="FAQ" title="FAQ・よくある質問" description="営業時間、料金、駐車場、保存機能についてのよくある質問をまとめました。" />
+    <div class="grid gap-4 md:grid-cols-2">
+      {faq.slice(0, 4).map((item) => (
+        <details class="paper-card rounded-3xl p-6">
+          <summary class="cursor-pointer font-serif text-xl font-bold text-[var(--wood)]">{item.q}</summary>
+          <p class="mt-4 text-sm leading-7 text-[var(--muted)]">{item.a}</p>
+        </details>
+      ))}
+    </div>
+    <div class="mt-8"><a href="/faq/" class="btn-secondary">FAQをすべて見る</a></div>
+  </section>
+</Layout>

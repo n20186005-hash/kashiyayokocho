@@ -1,0 +1,53 @@
+---
+import { navItems, site } from '@config/site';
+const currentPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+---
+<header class="sticky top-0 z-40 border-b border-[rgba(105,63,40,.14)] bg-[#fff8ea]/88 backdrop-blur-xl">
+  <div class="container-page flex items-center justify-between gap-4 py-3">
+    <a href="/" class="group flex min-w-0 items-center gap-3" aria-label={`${site.name} トップへ`}>
+      <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[var(--wood)] text-xl text-[#fff8ea] shadow-lg shadow-[rgba(63,40,27,.2)]">菓</span>
+      <span class="min-w-0">
+        <span class="block truncate font-serif text-lg font-bold tracking-[.08em] text-[var(--wood)]">{site.name}</span>
+        <span class="block truncate text-xs text-[var(--muted)]">{site.tagline}</span>
+      </span>
+    </a>
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="主なページ">
+      {navItems.map((item) => {
+        const isActive = item.href === '/' ? currentPath === '/' : currentPath === item.href;
+        return (
+          <a
+            href={item.href}
+            aria-current={isActive ? 'page' : undefined}
+            class:list={[
+              'site-nav-link rounded-full px-3.5 py-2 text-sm font-bold transition',
+              isActive
+                ? 'bg-[#3f281b] text-white shadow-sm ring-1 ring-[#3f281b]'
+                : 'text-[#3f281b] hover:bg-[rgba(105,63,40,.1)]',
+            ]}
+          >
+            {item.label}
+          </a>
+        );
+      })}
+    </nav>
+  </div>
+  <nav class="container-page flex gap-2 overflow-x-auto pb-3 lg:hidden" aria-label="スマートフォン用ページ">
+    {navItems.map((item) => {
+      const isActive = item.href === '/' ? currentPath === '/' : currentPath === item.href;
+      return (
+        <a
+          href={item.href}
+          aria-current={isActive ? 'page' : undefined}
+          class:list={[
+            'site-nav-link shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold transition',
+            isActive
+              ? 'border-[#3f281b] bg-[#3f281b] text-white shadow-sm'
+              : 'border-[rgba(105,63,40,.18)] bg-white/58 text-[#3f281b]',
+          ]}
+        >
+          {item.label}
+        </a>
+      );
+    })}
+  </nav>
+</header>

@@ -1,0 +1,44 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import SpotCard from '@components/SpotCard.astro';
+import { buildStructuredData, foods } from '@data/content';
+
+const title = '周辺グルメ';
+const description = '菓子屋横丁と周辺で楽しみたい駄菓子、芋菓子、パン、ベーグル、うなぎ、和食の候補を旅行者目線でまとめました。';
+---
+<Layout title={title} description={description} structuredData={buildStructuredData('/food/', title, description)}>
+  <PageHero
+    compact
+    eyebrow="FOOD"
+    title="甘い横丁に、川越らしい昼ごはんを足す。"
+    description="菓子屋横丁では飴・せんべい・だんご・芋菓子を少しずつ。ランチや休憩は、近くのベーカリー、ベーグル、うなぎ、和食を組み合わせると、半日散策でも疲れにくくなります。"
+    image="/images/kashiya-busy.webp"
+  />
+
+  <section class="container-page pb-16">
+    <SectionHeader eyebrow="PICKUP" title="周辺グルメリスト" description="営業時間・定休日・売り切れは各店舗で変わります。目当ての店がある場合は、当日朝に最新状況を確認してください。" />
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {foods.map((item) => <SpotCard item={item} />)}
+    </div>
+  </section>
+
+  <section class="container-page grid gap-6 pb-20 lg:grid-cols-3">
+    <article class="wood-card rounded-[2rem] p-7">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">SWEETS</p>
+      <h2 class="section-title mt-3 text-3xl font-black">横丁内は少量ずつ</h2>
+      <p class="mt-4 text-sm leading-8 text-[#f6ddb4]">飴、せんべい、麩菓子、だんご、芋菓子を一度に買いすぎると歩きにくくなります。最初にひと回りして、気になる店へ戻るのがおすすめです。</p>
+    </article>
+    <article class="paper-card rounded-[2rem] p-7">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[var(--red)]">LUNCH</p>
+      <h2 class="section-title mt-3 text-3xl font-black text-[var(--wood)]">昼食は早めに</h2>
+      <p class="mt-4 text-sm leading-8 text-[var(--muted)]">週末の川越は昼前後から行列が伸びやすいです。うなぎ・和食を狙うなら開店直後、軽食ならベーカリーやテイクアウトを組み込むと柔軟です。</p>
+    </article>
+    <article class="paper-card rounded-[2rem] p-7">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[var(--red)]">CASH</p>
+      <h2 class="section-title mt-3 text-3xl font-black text-[var(--wood)]">少額現金が安心</h2>
+      <p class="mt-4 text-sm leading-8 text-[var(--muted)]">小さな菓子店では支払い方法が限られる場合があります。100円玉・500円玉を少し持っておくと、駄菓子の買い歩きがスムーズです。</p>
+    </article>
+  </section>
+</Layout>

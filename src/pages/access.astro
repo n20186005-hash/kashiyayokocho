@@ -1,0 +1,83 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import GoogleMap from '@components/GoogleMap.astro';
+import SaveButton from '@components/SaveButton.astro';
+import { site } from '@config/site';
+import { buildStructuredData } from '@data/content';
+
+const title = '交通・駐車場';
+const description = '菓子屋横丁への電車・バス・徒歩・車での行き方、川越観光用駐車場、混雑しやすい時間、雨の日の回り方をまとめました。';
+---
+<Layout title={title} description={description} structuredData={buildStructuredData('/access/', title, description)}>
+  <PageHero
+    compact
+    eyebrow="ACCESS"
+    title="駅から歩くか、川越駅からバスで横丁前へ。"
+    description="菓子屋横丁は川越の蔵造りエリア北側にあります。本川越駅から徒歩約15〜20分、川越駅からはバスで「菓子屋横丁」停留所下車すぐ。車の場合は川越ICから約20分が目安です。"
+    image="/images/kashiya-street.webp"
+  />
+
+  <section class="container-page grid gap-8 pb-16 lg:grid-cols-3">
+    <article class="paper-card rounded-[1.7rem] p-6">
+      <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">TRAIN + WALK</p>
+      <h2 class="mt-3 font-serif text-3xl font-bold text-[var(--wood)]">本川越駅から徒歩</h2>
+      <p class="mt-4 text-sm leading-7 text-[var(--muted)]">西武新宿線「本川越駅」から蔵造りの町並みを抜けて歩くルート。初めての川越なら、途中の店や建物を見ながら自然に横丁へ向かえます。</p>
+      <p class="mt-4 rounded-2xl bg-[rgba(201,78,54,.08)] p-4 text-sm font-bold text-[var(--wood)]">目安：徒歩約15〜20分</p>
+    </article>
+    <article class="paper-card rounded-[1.7rem] p-6">
+      <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">BUS</p>
+      <h2 class="mt-3 font-serif text-3xl font-bold text-[var(--wood)]">川越駅からバス</h2>
+      <p class="mt-4 text-sm leading-7 text-[var(--muted)]">JR・東武東上線「川越駅」から東武バスなどで「菓子屋横丁」停留所へ。歩く距離を減らしたい家族連れや雨の日に向いています。</p>
+      <p class="mt-4 rounded-2xl bg-[rgba(122,163,123,.13)] p-4 text-sm font-bold text-[var(--wood)]">停留所：菓子屋横丁 下車すぐ</p>
+    </article>
+    <article class="paper-card rounded-[1.7rem] p-6">
+      <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">CAR</p>
+      <h2 class="mt-3 font-serif text-3xl font-bold text-[var(--wood)]">車・駐車場</h2>
+      <p class="mt-4 text-sm leading-7 text-[var(--muted)]">関越自動車道「川越」ICから約20分。横丁周辺は細い道と歩行者が多いため、公共駐車場または周辺コインパーキングに停めて歩くのが安全です。</p>
+      <p class="mt-4 rounded-2xl bg-[rgba(215,166,65,.16)] p-4 text-sm font-bold text-[var(--wood)]">週末は午前到着が安心</p>
+    </article>
+  </section>
+
+  <section class="container-page grid gap-10 pb-20 lg:grid-cols-[.85fr_1.15fr]">
+    <div>
+      <SectionHeader eyebrow="PARKING" title="駐車場情報" description="菓子屋横丁専用の大きな駐車場に頼るより、川越市の観光用駐車場や周辺コインパーキングを使う前提で計画しましょう。" />
+      <div class="grid gap-4">
+        <div class="rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/70 p-5">
+          <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">川越観光用駐車場</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--muted)]">JAいるま野農産物直売所「あぐれっしゅ川越」と共同利用の公共駐車場。無料・9:30〜18:00が目安ですが、横丁までは少し歩きます。</p>
+        </div>
+        <div class="rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/70 p-5">
+          <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">市庁舎北側・南側駐車場</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--muted)]">土曜・日曜・休日・年末年始など観光客利用ができる場合があります。有料で、利用条件は時期により変わるため現地表示を確認してください。</p>
+        </div>
+        <div class="rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/70 p-5">
+          <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">コインパーキング</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--muted)]">一番街・市役所・本川越駅周辺に点在します。狭い路地へ車で入り込まず、少し離れた場所に停めて歩く方がスムーズです。</p>
+        </div>
+      </div>
+    </div>
+    <div class="wood-card rounded-[2rem] p-8">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">LOCAL TIP</p>
+      <h2 class="section-title mt-3 text-4xl font-black">週末は「歩く川越」に切り替える。</h2>
+      <p class="mt-5 text-sm leading-8 text-[#f6ddb4]">川越の観光中心部は、車で細かく移動するほど時間が読みにくくなります。駅・駐車場から蔵造りエリアへ入り、菓子屋横丁、時の鐘、川越まつり会館を徒歩でつなぐのが基本です。</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <SaveButton id="kashiya-yokocho" title="菓子屋横丁" category="メイン" note="まずは横丁入口で写真、次に飴・せんべい・芋菓子。" />
+        <SaveButton id="toki-no-kane" title="時の鐘" category="周辺スポット" note="菓子屋横丁から徒歩圏。鐘の時間も楽しみたい。" />
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page grid gap-8 pb-20 lg:grid-cols-[.9fr_1.1fr]">
+    <div>
+      <SectionHeader eyebrow="MAP" title="地図で確認" description="埋め込み地図は日本語・日本地域パラメータに変更済みです。" />
+      <dl class="grid gap-3 text-sm leading-7">
+        <div class="rounded-2xl bg-white/70 p-4"><dt class="font-bold text-[var(--wood)]">住所</dt><dd class="text-[var(--muted)]">{site.address.full}</dd></div>
+        <div class="rounded-2xl bg-white/70 p-4"><dt class="font-bold text-[var(--wood)]">座標</dt><dd class="text-[var(--muted)]">{site.latitude}, {site.longitude}</dd></div>
+        <div class="rounded-2xl bg-white/70 p-4"><dt class="font-bold text-[var(--wood)]">問い合わせ目安</dt><dd class="text-[var(--muted)]">{site.phone}</dd></div>
+      </dl>
+    </div>
+    <GoogleMap />
+  </section>
+</Layout>

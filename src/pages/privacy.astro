@@ -1,0 +1,43 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import { buildStructuredData } from '@data/content';
+
+const title = 'プライバシー';
+const description = '菓子屋横丁さんぽ手帖のプライバシー方針。旅のリストと記念カードはブラウザ内で処理し、写真やメモをサーバーへ送信しません。';
+const structuredData = buildStructuredData('/privacy/', title, description);
+---
+<Layout title={title} description={description} structuredData={structuredData}>
+  <PageHero
+    eyebrow="Privacy"
+    title="写真と旅メモは、この端末の中だけ。"
+    description="このサイトはデータベース、ログイン、CMSを使いません。旅のリストはlocalStorage、記念カードはCanvasで処理されます。"
+    image="/images/kashiya-noren.webp"
+  />
+
+  <section class="container-page py-14">
+    <SectionHeader
+      eyebrow="Local First"
+      title="このサイトのデータ扱い"
+      description="旅行前後に安心して使えるよう、保存の仕組みを明示しています。"
+    />
+    <div class="mt-8 grid gap-5 md:grid-cols-3">
+      <article class="paper-card rounded-[1.6rem] p-6">
+        <p class="text-sm font-bold tracking-[.2em] text-[#b94732]">旅のリスト</p>
+        <h2 class="mt-3 font-serif text-2xl font-bold">localStorage保存</h2>
+        <p class="mt-3 leading-8 text-[#7c6757]">保存したスポットは現在のブラウザ内にだけ残ります。別端末への同期やサーバー保存は行いません。</p>
+      </article>
+      <article class="paper-card rounded-[1.6rem] p-6">
+        <p class="text-sm font-bold tracking-[.2em] text-[#b94732]">記念カード</p>
+        <h2 class="mt-3 font-serif text-2xl font-bold">Canvasで端末内合成</h2>
+        <p class="mt-3 leading-8 text-[#7c6757]">カメラ、セルフィー、アルバムから選んだ写真はブラウザ上で描画され、アップロードされません。</p>
+      </article>
+      <article class="paper-card rounded-[1.6rem] p-6">
+        <p class="text-sm font-bold tracking-[.2em] text-[#b94732]">アクセス解析</p>
+        <h2 class="mt-3 font-serif text-2xl font-bold">GA4を使用</h2>
+        <p class="mt-3 leading-8 text-[#7c6757]">閲覧傾向の把握のためGoogle Analytics 4を利用します。個人メモや写真の内容は送信しません。</p>
+      </article>
+    </div>
+  </section>
+</Layout>

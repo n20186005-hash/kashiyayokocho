@@ -1,0 +1,14 @@
+---
+import Layout from '@layouts/Layout.astro';
+const title = 'ページが見つかりません';
+---
+<Layout title={title} description="ページが見つかりません。" noindex={true}>
+  <section class="container-page grid min-h-[62vh] place-items-center py-16 text-center">
+    <div class="paper-card max-w-2xl rounded-[2rem] p-8 sm:p-12">
+      <p class="text-sm font-bold tracking-[.3em] text-[#b94732]">404</p>
+      <h1 class="mt-4 font-serif text-4xl font-bold text-[#3f281b] sm:text-5xl">甘い路地を少し外れました。</h1>
+      <p class="mt-5 leading-8 text-[#7c6757]">お探しのページは見つかりません。菓子屋横丁の案内トップへ戻って、もう一度散策を始めましょう。</p>
+      <a class="btn-primary mt-8" href="/">トップへ戻る</a>
+    </div>
+  </section>
+</Layout>

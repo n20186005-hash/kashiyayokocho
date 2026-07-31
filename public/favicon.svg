@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="菓子屋横丁">
+  <rect width="128" height="128" rx="28" fill="#f8ead0"/>
+  <path d="M24 86c15-25 31-37 48-36 13 1 24 8 32 22" fill="none" stroke="#693f28" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="40" cy="42" r="13" fill="#c94e36"/>
+  <circle cx="65" cy="34" r="12" fill="#f0b044"/>
+  <circle cx="88" cy="48" r="13" fill="#7aa37b"/>
+  <path d="M31 91h66" stroke="#693f28" stroke-width="10" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,37 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import { faq, buildStructuredData } from '@data/content';
+
+const title = 'FAQ・よくある質問';
+const description = '菓子屋横丁の入場料、営業時間、滞在時間、雨の日、駐車場、子ども連れ、支払い、ローカル保存機能についてまとめたFAQです。';
+const structuredData = buildStructuredData('/faq/', title, description);
+---
+<Layout title={title} description={description} structuredData={structuredData}>
+  <PageHero
+    eyebrow="FAQ"
+    title="菓子屋横丁のよくある質問"
+    description="散策前に知っておきたい料金、営業時間、滞在時間、駐車場、子ども連れ、ローカル保存機能を一か所にまとめました。"
+    image="/images/kashiya-sweets.webp"
+  />
+
+  <section class="container-page py-14">
+    <SectionHeader
+      eyebrow="Question & Answer"
+      title="よくある質問"
+      description="横丁全体ではなく店舗ごとに異なる情報もあるため、直前に確認したい点は各店の掲示や現地案内もあわせて見てください。"
+    />
+    <div class="mt-8 grid gap-4">
+      {faq.map((item) => (
+        <details class="paper-card group rounded-[1.5rem] p-5 sm:p-6" open={item.q.includes('入場料')}>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-serif text-lg font-bold text-[#3f281b]">
+            <span>{item.q}</span>
+            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#f8ead0] text-[#b94732] transition group-open:rotate-45">＋</span>
+          </summary>
+          <p class="mt-4 leading-8 text-[#7c6757]">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Layout>

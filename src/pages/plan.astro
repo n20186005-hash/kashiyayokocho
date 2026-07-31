@@ -1,0 +1,61 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import SaveButton from '@components/SaveButton.astro';
+import { buildStructuredData, modelPlans, tripSeedItems } from '@data/content';
+
+const title = '旅のリスト';
+const description = '菓子屋横丁と周辺スポットをlocalStorageに保存して、自分だけの川越散策リストを作れます。データは現在の端末にだけ保存されます。';
+---
+<Layout title={title} description={description} structuredData={buildStructuredData('/plan/', title, description)}>
+  <PageHero
+    compact
+    eyebrow="LOCAL STORAGE PLAN"
+    title="行きたい点を、端末だけに保存。"
+    description="気になる菓子店、ランチ、周辺スポットを保存して、川越さんぽの小さな旅のリストを作れます。データはブラウザのlocalStorageにのみ保存され、サーバーには送信されません。"
+    image="/images/kashiya-cafe.webp"
+  />
+
+  <section class="container-page grid gap-8 pb-16 lg:grid-cols-[.95fr_1.05fr]">
+    <div>
+      <SectionHeader eyebrow="SUGGESTIONS" title="まず保存しておきたい点" description="ボタンを押すと現在の端末にだけ保存されます。同じボタンをもう一度押すと保存を解除できます。" />
+      <div class="grid gap-3 sm:grid-cols-2">
+        {tripSeedItems.map((item) => (
+          <div class="rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/72 p-5">
+            <p class="text-xs font-black uppercase tracking-[.18em] text-[var(--red)]">{item.category}</p>
+            <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--wood)]">{item.title}</h2>
+            <p class="mt-3 text-sm leading-7 text-[var(--muted)]">{item.note}</p>
+            <div class="mt-4"><SaveButton id={item.id} title={item.title} category={item.category} note={item.note} compact /></div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <aside class="paper-card rounded-[2rem] p-6 lg:sticky lg:top-28 lg:self-start">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[var(--red)]">MY LIST</p>
+      <h2 class="section-title mt-2 text-3xl font-black text-[var(--wood)]">保存した旅のリスト</h2>
+      <p class="mt-3 text-sm leading-7 text-[var(--muted)]">チェックや削除はこの端末だけに反映されます。別ブラウザ・別端末とは共有されません。</p>
+      <div id="trip-empty" class="mt-6 rounded-3xl bg-[rgba(201,78,54,.08)] p-5 text-sm leading-7 text-[var(--muted)]">まだ保存された点がありません。左の候補や各ページの「旅リストに追加」ボタンを押してください。</div>
+      <div id="trip-list" class="mt-6 grid gap-3" aria-live="polite"></div>
+      <div id="trip-actions" class="mt-6 hidden flex-wrap gap-3">
+        <button id="trip-export" type="button" class="btn-secondary">テキストでコピー</button>
+        <button id="trip-clear" type="button" class="btn-secondary">すべて削除</button>
+      </div>
+    </aside>
+  </section>
+
+  <section class="container-page pb-20">
+    <SectionHeader eyebrow="COURSE" title="保存リストに合わせた回り方" description="保存した点が多い場合は、時間帯で区切ると歩きやすくなります。" />
+    <div class="grid gap-5 md:grid-cols-3">
+      {modelPlans.map((plan) => (
+        <article class="paper-card rounded-[1.7rem] p-6">
+          <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">{plan.title}</h3>
+          <ul class="mt-5 grid gap-3 text-sm leading-7 text-[var(--muted)]">
+            {plan.points.map((point) => <li class="flex gap-3"><span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-[var(--red)]"></span><span>{point}</span></li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>

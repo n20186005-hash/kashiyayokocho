@@ -1,0 +1,43 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import SpotCard from '@components/SpotCard.astro';
+import { buildStructuredData, nearbySpots } from '@data/content';
+
+const title = '周辺スポット';
+const description = '菓子屋横丁と一緒に歩きたい時の鐘、蔵造りの町並み、川越まつり会館、川越氷川神社、大正浪漫夢通り、喜多院を紹介します。';
+---
+<Layout title={title} description={description} structuredData={buildStructuredData('/nearby/', title, description)}>
+  <PageHero
+    compact
+    eyebrow="AROUND"
+    title="菓子屋横丁から、小江戸川越を一筆書きで。"
+    description="周辺スポットは徒歩圏にまとまっています。短時間なら時の鐘と蔵造り、半日なら川越氷川神社や喜多院まで足を延ばすと、甘い横丁と歴史の町並みがつながります。"
+    image="/images/kashiya-noren.webp"
+  />
+
+  <section class="container-page pb-16">
+    <SectionHeader eyebrow="SPOTS" title="周辺スポットリスト" description="移動時間は徒歩目安です。混雑・信号・撮影時間で前後するため、余裕を持って回りましょう。" />
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {nearbySpots.map((item) => <SpotCard item={item} />)}
+    </div>
+  </section>
+
+  <section class="container-page pb-20">
+    <div class="wood-card rounded-[2rem] p-8 md:p-10">
+      <div class="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">ROUTE</p>
+          <h2 class="section-title mt-3 text-4xl font-black">迷ったらこの順番。</h2>
+          <p class="mt-5 text-sm leading-8 text-[#f6ddb4]">本川越駅から入る場合は、蔵造りの町並み → 時の鐘 → 菓子屋横丁 → 川越まつり会館、余裕があれば川越氷川神社へ進むと流れが自然です。</p>
+        </div>
+        <ol class="grid gap-4 md:grid-cols-2">
+          {['蔵造りの町並みで町家の外観を眺める', '時の鐘で川越らしい写真を撮る', '菓子屋横丁で飴・せんべい・芋菓子を選ぶ', '川越まつり会館または氷川神社で締める'].map((step, index) => (
+            <li class="rounded-3xl border border-white/12 bg-white/8 p-5 text-sm leading-7 text-[#f6ddb4]"><span class="mr-2 text-lg font-black text-[#f6c96b]">{index + 1}</span>{step}</li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+</Layout>

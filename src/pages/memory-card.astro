@@ -1,0 +1,97 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import { buildStructuredData } from '@data/content';
+
+const title = '旅の記念カード';
+const description = '写真・セルフィー・アルバム画像をブラウザ内のCanvasで菓子屋横丁の記念カードに合成し、1:1・縦型ポストカード・9:16で保存できます。写真は端末内だけで処理されます。';
+const today = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replaceAll('/', '.');
+---
+<Layout title={title} description={description} structuredData={buildStructuredData('/memory-card/', title, description)}>
+  <PageHero
+    compact
+    eyebrow="CANVAS MEMORY CARD"
+    title="写真を、菓子屋横丁の一枚に。"
+    description="カメラ・セルフィー・アルバム画像を選び、サイズとレトロな菓子屋横丁風スタイルを選ぶだけ。合成はブラウザのCanvasで完結し、写真・文字・完成画像はサーバーへ送信されません。"
+    image="/images/kashiya-sweets.webp"
+  />
+
+  <section class="container-page grid gap-8 pb-20 lg:grid-cols-[.92fr_1.08fr]">
+    <div class="paper-card rounded-[2rem] p-6 md:p-8">
+      <SectionHeader eyebrow="CREATE" title="カード設定" description="写真はお使いの端末にのみ保存されます。ブラウザを閉じたり画像を変更したりしても、アップロードは行いません。" />
+      <div class="rounded-3xl bg-[rgba(122,163,123,.12)] p-5 text-sm font-bold leading-7 text-[var(--wood)]">写真はお使いの端末にのみ保存され、サーバーへ送信されません。</div>
+
+      <div class="mt-6 grid gap-4">
+        <div>
+          <label class="mb-2 block text-sm font-bold text-[var(--wood)]">写真を選ぶ</label>
+          <div class="grid gap-3 sm:grid-cols-3">
+            <label class="cursor-pointer rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/72 p-4 text-center text-sm font-bold text-[var(--wood)] hover:bg-white">
+              写真を撮る
+              <input id="photo-camera" class="sr-only memory-file-input" type="file" accept="image/*" capture="environment" />
+            </label>
+            <label class="cursor-pointer rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/72 p-4 text-center text-sm font-bold text-[var(--wood)] hover:bg-white">
+              セルフィー
+              <input id="photo-selfie" class="sr-only memory-file-input" type="file" accept="image/*" capture="user" />
+            </label>
+            <label class="cursor-pointer rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/72 p-4 text-center text-sm font-bold text-[var(--wood)] hover:bg-white">
+              アルバム
+              <input id="photo-album" class="sr-only memory-file-input" type="file" accept="image/*" />
+            </label>
+          </div>
+          <p id="memory-file-name" class="mt-3 text-xs leading-5 text-[var(--muted)]">まだ写真は選択されていません。初期表示ではサンプル背景で確認できます。</p>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block">
+            <span class="mb-2 block text-sm font-bold text-[var(--wood)]">カード名</span>
+            <input id="card-title" class="w-full rounded-2xl border border-[rgba(105,63,40,.22)] bg-white/82 px-4 py-3 text-[var(--wood)] outline-none focus:border-[var(--red)]" value="菓子屋横丁" maxlength="24" />
+          </label>
+          <label class="block">
+            <span class="mb-2 block text-sm font-bold text-[var(--wood)]">日付</span>
+            <input id="card-date" class="w-full rounded-2xl border border-[rgba(105,63,40,.22)] bg-white/82 px-4 py-3 text-[var(--wood)] outline-none focus:border-[var(--red)]" value={today} maxlength="20" />
+          </label>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="block">
+            <span class="mb-2 block text-sm font-bold text-[var(--wood)]">サイズ</span>
+            <select id="card-size" class="w-full rounded-2xl border border-[rgba(105,63,40,.22)] bg-white/82 px-4 py-3 text-[var(--wood)] outline-none focus:border-[var(--red)]">
+              <option value="square">1:1 正方形</option>
+              <option value="postcard">縦型ポストカード</option>
+              <option value="story">9:16 縦長</option>
+            </select>
+          </label>
+          <label class="block">
+            <span class="mb-2 block text-sm font-bold text-[var(--wood)]">スタイル</span>
+            <select id="card-style" class="w-full rounded-2xl border border-[rgba(105,63,40,.22)] bg-white/82 px-4 py-3 text-[var(--wood)] outline-none focus:border-[var(--red)]">
+              <option value="retro">飴色レトロ</option>
+              <option value="glass">石畳ガラス</option>
+              <option value="noren">暖簾ブラウン</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="block">
+          <span class="mb-2 block text-sm font-bold text-[var(--wood)]">ひとこと</span>
+          <input id="card-caption" class="w-full rounded-2xl border border-[rgba(105,63,40,.22)] bg-white/82 px-4 py-3 text-[var(--wood)] outline-none focus:border-[var(--red)]" value="小江戸川越、甘い香りの石畳。" maxlength="42" />
+        </label>
+
+        <div class="flex flex-wrap gap-3 pt-2">
+          <button id="render-card" type="button" class="btn-primary">プレビュー更新</button>
+          <button id="download-card" type="button" class="btn-secondary">PNGをダウンロード</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <div class="paper-card rounded-[2rem] p-4">
+        <canvas id="memory-canvas" class="max-h-[72vh] w-full rounded-[1.6rem] bg-[#3f281b] shadow-2xl shadow-[rgba(63,40,27,.18)]" width="1080" height="1080"></canvas>
+      </div>
+      <p class="mt-4 rounded-3xl bg-white/72 p-4 text-xs leading-6 text-[var(--muted)]">Canvas上の写真は端末内メモリで処理されます。ダウンロードしたPNGファイルも端末に保存されます。</p>
+    </div>
+  </section>
+  <script>
+    import '@scripts/memory-card.ts';
+  </script>
+</Layout>
