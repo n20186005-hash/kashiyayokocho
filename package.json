@@ -1,0 +1,28 @@
+{
+  "name": "kashiya-yokocho-guide",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.18.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "deploy": "pnpm build && wrangler deploy",
+    "cf:preview": "pnpm build && wrangler dev --assets ./dist",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "latest",
+    "@tailwindcss/vite": "latest",
+    "astro": "latest",
+    "tailwindcss": "latest",
+    "typescript": "6.0.3"
+  },
+  "devDependencies": {
+    "wrangler": "latest"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
