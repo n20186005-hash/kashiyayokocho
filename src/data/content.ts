@@ -24,13 +24,34 @@ export const highlights = [
   },
 ];
 
+/**
+ * Google マップの最新評価（2026年9月時点）。
+ * 注意：評価スコアと件数はページ上でのみ表示し、個々のレビュー本文は JSON-LD に含めません。
+ */
+export const googleRating = {
+  value: site.ratingValue,
+  best: 5,
+  count: site.reviewCount,
+  countLabel: site.reviewCount.toLocaleString('ja-JP'),
+  sourceName: site.ratingSourceName,
+  sourceUrl: site.mapsShareUrl,
+  syncedAt: site.ratingSyncedAt,
+  note: site.ratingSourceNote,
+  noteShort: site.ratingSourceNoteShort,
+  /** 星の内訳（0.5 刻みの表示用）：実際の内訳は Google マップ側でご確認ください。 */
+  scale: [1, 2, 3, 4, 5],
+};
+
 export const visitFacts = [
   { label: '所在地', value: site.address.full },
   { label: '入場料', value: '横丁の散策は無料。菓子・飲食・体験は店舗ごとの料金です。' },
   { label: '営業時間', value: site.openingHoursText },
   { label: 'おすすめ滞在', value: '30〜60分。食べ歩きや写真をじっくり楽しむなら90分ほど。' },
   { label: '混雑しにくい時間', value: '平日午前、または夕方前。週末は昼前後から混みやすいです。' },
-  { label: '口コミ評価目安', value: '4.1 / 5（旅行口コミサイト掲載値。変動します）' },
+  {
+    label: 'Google マップ評価',
+    value: `${googleRating.value} / ${googleRating.best}（Google マップのユーザー評価 ${googleRating.countLabel}件・同期時期 ${googleRating.syncedAt}。評価は変動します）`,
+  },
 ];
 
 export const foods: TripItem[] = [
@@ -232,13 +253,23 @@ export const photoCredits = [
 
 export const infoSources = [
   {
+    title: 'Google マップ（Google Maps）のユーザー評価',
+    url: site.mapsShareUrl,
+    memo: `評価 ${site.ratingValue} / 5（${site.reviewCount.toLocaleString('ja-JP')}件）の同期元。同期時期：${site.ratingSyncedAt}。著作権は投稿者本人および Google マップに帰属します。`,
+  },
+  {
+    title: '菓子屋横丁 公式サイト',
+    url: site.officialUrl,
+    memo: '横丁の公式情報・店舗案内の確認先として参照。',
+  },
+  {
     title: '小江戸川越観光協会「菓子屋横丁」',
     url: 'https://koedo.or.jp/spot_003/',
     memo: '約30軒程度、石畳、かおり風景100選、所在地の確認に使用。',
   },
   {
     title: '川越市「菓子屋横丁」',
-    url: 'https://www.city.kawagoe.saitama.jp/kanko/k-spots/1011557/1011568.html',
+    url: site.cityTourismUrl,
     memo: '歴史、所在地、かおり風景100選、店舗数の確認に使用。',
   },
   {
@@ -253,20 +284,64 @@ export const infoSources = [
   },
 ];
 
+/** 资料来源区块（SourcesSection）で使う、出典の要約リスト */
+export const sources = [
+  {
+    kind: '評価',
+    title: `${site.attractionName}の Google マップ評価`,
+    syncedAt: site.ratingSyncedAt,
+    memo: `評価 ${site.ratingValue} / 5・${site.reviewCount.toLocaleString('ja-JP')}件。同期時期：${site.ratingSyncedAt}。著作権は投稿者本人および Google マップに帰属します。`,
+    url: site.mapsShareUrl,
+    linkLabel: 'Google マップで全部の評価を見る',
+  },
+  {
+    kind: '公式',
+    title: `${site.attractionName} 公式サイト`,
+    syncedAt: '随時参照',
+    memo: '横丁の公式案内。営業時間・店舗情報の最終確認は公式サイトと各店の掲示をご確認ください。',
+    url: site.officialUrl,
+    linkLabel: '公式サイトを開く',
+  },
+  {
+    kind: '自治体',
+    title: site.cityTourismName,
+    syncedAt: '随時参照',
+    memo: '所在地・歴史・かおり風景100選・店舗数の確認に使用した川越市の観光ページ。',
+    url: site.cityTourismUrl,
+    linkLabel: '川越市のページを開く',
+  },
+  {
+    kind: '観光協会',
+    title: site.govtTourismName,
+    syncedAt: '随時参照',
+    memo: '周辺スポット・回遊ルートの確認に使用した地元観光協会の公式ポータル。',
+    url: site.govtTourismUrl,
+    linkLabel: '観光協会のページを開く',
+  },
+];
+
 export const tripSeedItems: TripItem[] = [
   { id: 'kashiya-yokocho', title: site.attractionName, category: 'メイン', note: '飴・せんべい・だんご・芋菓子を少しずつ。' },
   ...nearbySpots.slice(0, 4),
   ...foods.slice(0, 4),
 ];
 
-export const buildStructuredData = (path = '/', pageTitle?: string, pageDescription?: string) => {
+export type BreadcrumbItem = { name: string; path?: string };
+
+export const buildStructuredData = (
+  path = '/',
+  pageTitle?: string,
+  pageDescription?: string,
+  breadcrumb?: BreadcrumbItem[],
+) => {
   const url = site.url ? absoluteUrl(path) : undefined;
-  const image = site.url ? absoluteUrl(site.ogImage) : undefined;
+  const images = site.url ? [absoluteUrl(site.ogImage), absoluteUrl(site.heroImage)] : undefined;
   const websiteId = site.url ? `${site.url}/#website` : '#website';
-  const attractionId = site.url ? `${site.url}/#tourist-attraction` : '#tourist-attraction';
+  const attractionId = site.url ? `${site.url}/#attraction` : '#attraction';
   const localBusinessId = site.url ? `${site.url}/#local-business` : '#local-business';
   const faqId = site.url ? `${site.url}/faq/#faq` : '#faq';
   const webpageId = url ? `${url}#webpage` : '#webpage';
+  const breadcrumbId = url ? `${url}#breadcrumb` : '#breadcrumb';
   const faqEntities = faq.map((item) => ({
     '@type': 'Question',
     name: item.q,
@@ -275,6 +350,23 @@ export const buildStructuredData = (path = '/', pageTitle?: string, pageDescript
       text: item.a,
     },
   }));
+
+  const postalAddress = {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    addressLocality: site.address.locality,
+    addressRegion: site.address.region,
+    postalCode: site.address.postalCode,
+    addressCountry: site.countryCode,
+  };
+
+  const geoCoordinates = {
+    '@type': 'GeoCoordinates',
+    latitude: site.latitude,
+    longitude: site.longitude,
+  };
+
+  const attractionDescription = `${site.attractionName}は${site.region}${site.city}${site.address.street}にある、昔ながらの菓子屋が並ぶ石畳の横丁。${site.city}の蔵造りの町並み・${site.nearbyLandmarks[0]}とあわせて歩ける${site.region}の観光地です。`;
 
   const openingHoursSpecification = {
     '@type': 'OpeningHoursSpecification',
@@ -299,69 +391,60 @@ export const buildStructuredData = (path = '/', pageTitle?: string, pageDescript
         '@type': 'TouristAttraction',
         '@id': attractionId,
         name: site.attractionName,
-        alternateName: 'Kashiya Yokocho',
-        description: '埼玉県川越市元町2丁目にある、昔ながらの菓子屋が並ぶ石畳の横丁。',
-        ...(image ? { image } : {}),
+        alternateName: [
+          site.attractionLatinName,
+          `${site.city} ${site.attractionName}`,
+          `${site.attractionName}（${site.city}）`,
+        ],
+        description: attractionDescription,
+        ...(images ? { image: images } : {}),
         ...(url ? { url } : {}),
         isAccessibleForFree: true,
-        address: {
-          '@type': 'PostalAddress',
-          postalCode: site.address.postalCode,
-          addressRegion: site.address.region,
-          addressLocality: site.address.locality,
-          streetAddress: site.address.street,
-          addressCountry: 'JP',
-        },
-        geo: {
-          '@type': 'GeoCoordinates',
-          latitude: site.latitude,
-          longitude: site.longitude,
-        },
+        ...(site.url ? { hasMap: site.mapsShareUrl } : {}),
+        ...(site.url
+          ? { sameAs: [site.mapsShareUrl, site.officialUrl, site.govtTourismUrl, site.cityTourismUrl] }
+          : {}),
+        address: postalAddress,
+        geo: geoCoordinates,
         openingHours: site.openingHoursText,
         openingHoursSpecification,
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: site.ratingValue,
-          bestRating: '5',
-          reviewCount: site.reviewCount,
-        },
       },
       {
         '@type': 'LocalBusiness',
         '@id': localBusinessId,
         name: site.attractionName,
-        description: '川越の菓子屋・駄菓子店が集まる観光向け商店街。',
-        ...(image ? { image } : {}),
+        alternateName: [site.attractionLatinName, `${site.city} ${site.attractionName}`],
+        description: `${site.region}${site.city}の菓子屋・駄菓子店が集まる観光向け商店街。`,
+        ...(images ? { image: images } : {}),
         telephone: site.phone,
         priceRange: site.priceRange,
         ...(url ? { url } : {}),
-        address: {
-          '@type': 'PostalAddress',
-          postalCode: site.address.postalCode,
-          addressRegion: site.address.region,
-          addressLocality: site.address.locality,
-          streetAddress: site.address.street,
-          addressCountry: 'JP',
-        },
-        geo: {
-          '@type': 'GeoCoordinates',
-          latitude: site.latitude,
-          longitude: site.longitude,
-        },
+        ...(site.url ? { hasMap: site.mapsShareUrl } : {}),
+        ...(site.url ? { sameAs: [site.mapsShareUrl, site.officialUrl] } : {}),
+        address: postalAddress,
+        geo: geoCoordinates,
         openingHours: site.openingHoursText,
         openingHoursSpecification,
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: site.ratingValue,
-          bestRating: '5',
-          reviewCount: site.reviewCount,
-        },
       },
       {
         '@type': 'FAQPage',
         '@id': faqId,
         mainEntity: faqEntities,
       },
+      ...(breadcrumb?.length
+        ? [
+            {
+              '@type': 'BreadcrumbList',
+              '@id': breadcrumbId,
+              itemListElement: breadcrumb.map((item, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                name: item.name,
+                ...(item.path && site.url ? { item: absoluteUrl(item.path) } : {}),
+              })),
+            },
+          ]
+        : []),
       {
         '@type': 'WebPage',
         '@id': webpageId,
@@ -370,6 +453,7 @@ export const buildStructuredData = (path = '/', pageTitle?: string, pageDescript
         description: pageDescription ?? site.description,
         isPartOf: { '@id': websiteId },
         about: { '@id': attractionId },
+        ...(breadcrumb?.length ? { breadcrumb: { '@id': breadcrumbId } } : {}),
         inLanguage: 'ja-JP',
       },
     ],

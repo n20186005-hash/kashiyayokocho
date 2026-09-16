@@ -1,0 +1,84 @@
+---
+import { site } from '@config/site';
+import { googleRating } from '@data/content';
+
+interface Props {
+  tone?: 'light' | 'wood';
+  compact?: boolean;
+}
+const { tone = 'light', compact = false } = Astro.props;
+const wood = tone === 'wood';
+const percent = (googleRating.value / googleRating.best) * 100;
+---
+
+<section
+  class:list={[
+    'rounded-[1.8rem] p-6 md:p-8',
+    wood ? 'border border-white/12 bg-white/8 text-[#fff8ea]' : 'paper-card',
+  ]}
+  aria-labelledby="google-rating-title"
+>
+  <p class:list={['text-xs font-black uppercase tracking-[.22em]', wood ? 'text-[#f6c96b]' : 'text-[var(--red)]']}>
+    USER RATING
+  </p>
+  <h2
+    id="google-rating-title"
+    class:list={['mt-2 font-serif font-bold tracking-[.04em]', compact ? 'text-2xl' : 'text-3xl md:text-4xl', wood ? 'text-[#fff8ea]' : 'text-[var(--wood)]']}
+  >
+    Google マップの評価
+  </h2>
+
+  <div class="mt-5 flex flex-wrap items-end gap-x-5 gap-y-3">
+    <p class:list={['font-serif font-black leading-none', wood ? 'text-[#f6c96b]' : 'text-[var(--red)]', compact ? 'text-5xl' : 'text-6xl md:text-7xl']}>
+      {googleRating.value}
+      <span class:list={['text-xl font-bold md:text-2xl', wood ? 'text-[#f6ddb4]' : 'text-[var(--muted)]']}> / {googleRating.best}</span>
+    </p>
+    <div class="pb-1">
+      <div class="relative inline-block text-2xl leading-none tracking-[.08em]" aria-hidden="true">
+        <span class:list={[wood ? 'text-white/25' : 'text-[rgba(105,63,40,.22)]']}>★★★★★</span>
+        <span
+          class:list={['absolute inset-0 overflow-hidden', wood ? 'text-[#f6c96b]' : 'text-[var(--gold)]']}
+          style={`width:${percent}%;`}
+        >★★★★★</span>
+      </div>
+      <p class:list={['mt-2 text-sm font-bold', wood ? 'text-[#f6ddb4]' : 'text-[var(--wood)]']}>
+        {googleRating.countLabel}件のユーザー評価
+      </p>
+    </div>
+  </div>
+
+  <p class:list={['mt-4 text-xs leading-6', wood ? 'text-[#f6ddb4]' : 'text-[var(--muted)]']}>
+    評価と評価件数は Google マップ（Google Maps）のユーザー評価を同期 · {googleRating.syncedAt} ·
+    <a
+      class="font-bold underline decoration-dotted underline-offset-4"
+      href={googleRating.sourceUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      すべての評価を Google マップで見る↗
+    </a>
+  </p>
+
+  <p class:list={['mt-4 rounded-2xl p-4 text-xs leading-6', wood ? 'bg-black/20 text-[#f6ddb4]' : 'bg-[rgba(63,40,27,.05)] text-[var(--muted)]']}>
+    {googleRating.note}
+  </p>
+
+  <div class="mt-5 flex flex-wrap gap-3">
+    <a
+      class={wood ? 'btn-secondary border-white/30 bg-white/10 !text-[#fff8ea]' : 'btn-primary'}
+      href={googleRating.sourceUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Google マップで全部の評価を見る
+    </a>
+    <a
+      class={wood ? 'btn-secondary border-white/30 bg-white/10 !text-[#fff8ea]' : 'btn-secondary'}
+      href={site.officialUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      公式サイトを開く
+    </a>
+  </div>
+</section>

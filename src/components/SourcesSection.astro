@@ -1,0 +1,56 @@
+---
+import SectionHeader from '@components/SectionHeader.astro';
+import { site } from '@config/site';
+import { googleRating, sources } from '@data/content';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = '情報の出典（資料来源）',
+  description = '各ページの内容は、Google マップのユーザー評価と公的機関・公式サイトの公開情報を組み合わせて整理しています。最新情報は必ず出典元でご確認ください。',
+} = Astro.props;
+---
+
+<section class="container-page pb-20">
+  <SectionHeader eyebrow="SOURCES" title={title} description={description} />
+  <div class="grid gap-4 md:grid-cols-2">
+    {sources.map((item) => (
+      <article class="paper-card rounded-[1.5rem] p-5">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="rounded-full bg-[rgba(201,78,54,.1)] px-3 py-1 text-xs font-bold text-[var(--red)]">{item.kind}</span>
+          <span class="text-xs font-bold text-[var(--muted)]">同期時期 / 参照：{item.syncedAt}</span>
+        </div>
+        <h3 class="mt-3 font-serif text-xl font-bold text-[var(--wood)]">{item.title}</h3>
+        <p class="mt-2 text-sm leading-7 text-[var(--muted)]">{item.memo}</p>
+        <a
+          class="mt-3 inline-flex text-sm font-bold text-[var(--red)] underline decoration-dotted underline-offset-4"
+          href={item.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {item.linkLabel}↗
+        </a>
+      </article>
+    ))}
+  </div>
+
+  <div class="mt-6 rounded-[1.5rem] border border-[rgba(105,63,40,.18)] bg-white/70 p-5">
+    <p class="text-sm font-bold text-[var(--wood)]">
+      評価 · 同期時期 {googleRating.syncedAt}
+    </p>
+    <p class="mt-2 text-sm leading-7 text-[var(--muted)]">
+      評価 {googleRating.value} / {googleRating.best}（{googleRating.countLabel}件）は {googleRating.sourceName} のユーザー評価を同期したものです。{googleRating.note}
+      本サイトは {site.attractionName} および各店舗・自治体の公式サイトではない非公式ガイドです。
+    </p>
+    <div class="mt-4 flex flex-wrap gap-3">
+      <a class="btn-secondary" href={googleRating.sourceUrl} target="_blank" rel="noopener noreferrer">
+        Google マップで全部の評価を見る↗
+      </a>
+      <a class="btn-secondary" href={site.officialUrl} target="_blank" rel="noopener noreferrer">公式サイトを開く↗</a>
+      <a class="btn-secondary" href={site.govtTourismUrl} target="_blank" rel="noopener noreferrer">{site.govtTourismName}↗</a>
+      <a class="btn-secondary" href="/credits/">写真・情報クレジットを見る</a>
+    </div>
+  </div>
+</section>

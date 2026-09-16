@@ -8,6 +8,7 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
   structuredData?: unknown;
   noindex?: boolean;
 }
@@ -16,11 +17,12 @@ const {
   title = site.name,
   description = site.description,
   image = site.ogImage,
+  imageAlt = `${site.attractionName}（${site.city}）の石畳と店先の風景`,
   structuredData,
   noindex = false,
 } = Astro.props;
 const canonical = site.url ? absoluteUrl(Astro.url.pathname) : undefined;
-const pageTitle = title === site.name ? title : `${title}｜${site.shortName}`;
+const pageTitle = title === site.name || title.includes(site.shortName) ? title : `${title}｜${site.shortName}`;
 const ogImage = site.url ? absoluteUrl(image) : undefined;
 ---
 <!doctype html>
@@ -33,14 +35,32 @@ const ogImage = site.url ? absoluteUrl(image) : undefined;
     {canonical && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta property="og:locale" content={site.locale} />
+    <meta property="og:site_name" content={site.name} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     {canonical && <meta property="og:url" content={canonical} />}
     {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta property="og:image:alt" content={imageAlt} />}
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#f8ead0" />
+    {canonical && <meta name="twitter:url" content={canonical} />}
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {ogImage && <meta name="twitter:image:alt" content={imageAlt} />}
+    <meta name="theme-color" content={site.themeColor} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content={site.shortName} />
+    <meta name="application-name" content={site.shortName} />
+    <meta name="geo.region" content="JP-11" />
+    <meta name="geo.placename" content={`${site.region}${site.city}`} />
+    <meta name="geo.position" content={`${site.latitude};${site.longitude}`} />
+    <meta name="ICBM" content={`${site.latitude}, ${site.longitude}`} />
     <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.ga4}`}></script>
     <script is:inline define:vars={{ ga4: site.ga4 }}>
       window.dataLayer = window.dataLayer || [];
@@ -59,5 +79,16 @@ const ogImage = site.url ? absoluteUrl(image) : undefined;
     <script>
       import '@scripts/trip-list.ts';
     </script>
+    {
+      import.meta.env.PROD && (
+        <script is:inline>
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+              navigator.serviceWorker.register('/sw.js').catch(function () {});
+            });
+          }
+        </script>
+      )
+    }
   </body>
 </html>

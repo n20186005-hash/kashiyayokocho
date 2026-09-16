@@ -2,21 +2,49 @@
 import Layout from '@layouts/Layout.astro';
 import PageHero from '@components/PageHero.astro';
 import SectionHeader from '@components/SectionHeader.astro';
-import { buildStructuredData, infoSources, photoCredits } from '@data/content';
+import SourcesSection from '@components/SourcesSection.astro';
+import { site } from '@config/site';
+import { buildStructuredData, googleRating, infoSources, photoCredits } from '@data/content';
 
 const title = '写真・情報クレジット';
-const description = '菓子屋横丁さんぽ手帖で利用した写真と情報参照元の一覧です。';
-const structuredData = buildStructuredData('/credits/', title, description);
+const description = `菓子屋横丁さんぽ手帖で利用した写真と情報参照元の一覧です。Google マップのユーザー評価（${googleRating.value} / 5・${googleRating.countLabel}件・同期時期 ${googleRating.syncedAt}）の出典も掲載しています。`;
+const structuredData = buildStructuredData('/credits/', title, description, [
+  { name: 'ホーム', path: '/' },
+  { name: '写真・情報クレジット' },
+]);
 ---
 <Layout title={title} description={description} structuredData={structuredData}>
   <PageHero
     eyebrow="Credits"
     title="写真と情報の出典"
-    description="サイト内の写真はローカルに配置し、クレジットをこのページにまとめています。"
+    description="サイト内の写真はローカルに配置し、クレジットをこのページにまとめています。評価は Google マップのユーザー評価を同期しています。"
     image="/images/kashiya-busy.webp"
+    imageAlt={`${site.attractionName}（${site.city}）の賑わう路地の風景`}
   />
 
   <section class="container-page py-14">
+    <SectionHeader eyebrow="Rating" title="評価の出典" description="ページ上部に表示している評価スコアと評価件数の引用元です。" />
+    <div class="mt-8 rounded-[1.6rem] border border-[rgba(105,63,40,.18)] bg-white/72 p-6">
+      <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">Google Maps</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--wood)]">
+        {googleRating.value} / {googleRating.best}（{googleRating.countLabel}件）・同期時期 {googleRating.syncedAt}
+      </h2>
+      <p class="mt-3 text-sm leading-7 text-[var(--muted)]">{googleRating.note}</p>
+      <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+        個々のレビュー本文は本サイトには転載せず、Google マップ上でご確認いただけます。評価は日々変動します。
+      </p>
+      <a
+        class="mt-4 inline-flex text-sm font-bold text-[var(--red)] underline decoration-dotted underline-offset-4"
+        href={googleRating.sourceUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Google マップで全部の評価を見る↗
+      </a>
+    </div>
+  </section>
+
+  <section class="container-page pb-14">
     <SectionHeader eyebrow="Photos" title="写真クレジット" description="Wikimedia Commons 掲載画像をサイト内に保存し、WebP化して利用しています。" />
     <div class="mt-8 grid gap-4 md:grid-cols-2">
       {photoCredits.map((item) => (
@@ -30,7 +58,7 @@ const structuredData = buildStructuredData('/credits/', title, description);
     </div>
   </section>
 
-  <section class="container-page pb-16">
+  <section class="container-page pb-8">
     <SectionHeader eyebrow="Information" title="情報参照元" description="交通・駐車場・歴史情報など、ページ作成時に確認した主な参照元です。" />
     <div class="mt-8 grid gap-4 md:grid-cols-2">
       {infoSources.map((item) => (
@@ -42,4 +70,6 @@ const structuredData = buildStructuredData('/credits/', title, description);
       ))}
     </div>
   </section>
+
+  <SourcesSection title="資料来源（Sources）" description={`${site.attractionName}の評価・所在地・歴史・周辺情報の出典を一覧にまとめました。`} />
 </Layout>
