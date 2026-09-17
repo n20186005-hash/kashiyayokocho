@@ -1,0 +1,46 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import { siteText } from '@i18n/site';
+import { buildStructuredDataEn, faq } from '@data/content.en';
+
+const lang = 'en' as const;
+const st = siteText(lang);
+const title = `FAQ | ${st.attractionName}`;
+const description = 'FAQ covering admission, opening hours, how long to allow, rainy days, parking, children, payment and the local save features for Kashiya Yokocho.';
+const structuredData = buildStructuredDataEn('/en/faq/', title, description, [
+  { name: 'Home', path: '/en/' },
+  { name: st.attractionName },
+  { name: 'FAQ' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData} lang={lang}>
+  <PageHero
+    eyebrow="FAQ"
+    title={`Frequently asked questions about ${st.attractionName}`}
+    description="Admission, hours, how long to allow, parking, children and the local save features, gathered in one place."
+    image="/images/kashiya-sweets.webp"
+    lang={lang}
+  />
+
+  <section class="container-page py-14">
+    <SectionHeader
+      eyebrow="Question & Answer"
+      title="FAQ"
+      description="Some information differs by shop rather than by lane, so also check shop notices and local signage for anything you need to confirm on the day."
+    />
+    <div class="mt-8 grid gap-4">
+      {faq.map((item) => (
+        <details class="paper-card group rounded-[1.5rem] p-5 sm:p-6" open={item.q.includes('admission fee')}>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-serif text-lg font-bold text-[#3f281b]">
+            <span>{item.q}</span>
+            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#f8ead0] text-[#b94732] transition group-open:rotate-45">＋</span>
+          </summary>
+          <p class="mt-4 leading-8 text-[#7c6757]">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Layout>

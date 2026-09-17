@@ -1,0 +1,231 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import InfoPill from '@components/InfoPill.astro';
+import SpotCard from '@components/SpotCard.astro';
+import GoogleMap from '@components/GoogleMap.astro';
+import GoogleRating from '@components/GoogleRating.astro';
+import SourcesSection from '@components/SourcesSection.astro';
+import WeatherForecast from '@components/WeatherForecast.astro';
+import VisitorServices from '@components/VisitorServices.astro';
+import SeasonalGuide from '@components/SeasonalGuide.astro';
+import VisitorRoutes from '@components/VisitorRoutes.astro';
+import VisitorResponsibility from '@components/VisitorResponsibility.astro';
+import EventsCalendar from '@components/EventsCalendar.astro';
+import Accessibility from '@components/Accessibility.astro';
+import SaveButton from '@components/SaveButton.astro';
+import { site } from '@config/site';
+import { siteText } from '@i18n/site';
+import { buildStructuredDataEn, foods, googleRating, highlights, nearbySpots, visitFacts, faq, modelPlans } from '@data/content.en';
+
+const lang = 'en' as const;
+const st = siteText(lang);
+const title = `${st.attractionName} (${st.city}) | Travel guide: location, access & nearby spots`;
+const description = `An unofficial traveller guide to ${st.attractionName} in Motomachi, ${st.city}, ${st.region}. Google Maps rating ${googleRating.value}/5 (${googleRating.countLabel} ratings, synced ${googleRating.syncedAt}), location, hours, how to get here, ${st.nearbyLandmarks[0]}, nearby food and FAQ.`;
+const structuredData = buildStructuredDataEn('/en/', title, description, [
+  { name: 'Home', path: '/en/' },
+  { name: st.region },
+  { name: st.city },
+  { name: st.attractionName },
+]);
+const entityChain = [st.attractionName, site.city, site.region, 'Japan'];
+---
+
+<Layout title={title} description={description} structuredData={structuredData} lang={lang}>
+  <PageHero
+    title={`${st.attractionName} (${st.city})`}
+    description={st.entityLead}
+    image={site.heroImage}
+    imageAlt={`Stone-paved lane and shopfronts of ${st.attractionName}, ${st.city}`}
+    lang={lang}
+  />
+
+  <section class="container-page pb-4">
+    <nav aria-label="Location hierarchy" class="flex flex-wrap items-center gap-2 text-sm">
+      {entityChain.map((item, index) => (
+        <span class="flex items-center gap-2">
+          {index > 0 && <span class="text-[rgba(105,63,40,.4)]">›</span>}
+          <span class={index === 0 ? 'font-bold text-[var(--wood)]' : 'text-[var(--muted)]'}>{item}</span>
+        </span>
+      ))}
+    </nav>
+  </section>
+
+  <section class="container-page grid gap-6 pb-16 lg:grid-cols-[1.05fr_.95fr]">
+    <GoogleRating lang={lang} />
+    <div class="paper-card rounded-[1.8rem] p-6 md:p-8">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[var(--red)]">LOCATION</p>
+      <h2 class="mt-2 font-serif text-3xl font-bold text-[var(--wood)] md:text-4xl">Where {st.attractionName} is ({site.city}, {site.region})</h2>
+      <dl class="mt-5 grid gap-3 text-sm leading-7">
+        <div class="rounded-2xl bg-white/70 p-4">
+          <dt class="font-bold text-[var(--wood)]">Address</dt>
+          <dd class="text-[var(--muted)]">{st.addressFull}</dd>
+        </div>
+        <div class="rounded-2xl bg-white/70 p-4">
+          <dt class="font-bold text-[var(--wood)]">Coordinates</dt>
+          <dd class="text-[var(--muted)]">{site.latitude}, {site.longitude}</dd>
+        </div>
+        <div class="rounded-2xl bg-white/70 p-4">
+          <dt class="font-bold text-[var(--wood)]">Category</dt>
+          <dd class="text-[var(--muted)]">{st.category}</dd>
+        </div>
+      </dl>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <SaveButton id="kashiya-yokocho" title={st.attractionName} category="Main" note="A little candy, crackers, dumplings and sweet-potato sweets." lang={lang} />
+        <a href="/en/access/" class="btn-secondary">Access &amp; parking</a>
+        <a class="btn-secondary" href={site.mapsShareUrl} target="_blank" rel="noopener noreferrer">Open in Google Maps↗</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page pb-16">
+    <SectionHeader
+      eyebrow="ABOUT"
+      title={`About ${st.attractionName} (${st.city})`}
+      description={`The official name is ${st.attractionName}. It sits just north of the kurazukuri warehouse district of ${st.city}, about a 4-minute walk from ${st.nearbyLandmarks[0]}. Shops selling candy, rice crackers, dumplings, sweet-potato sweets and dagashi line a narrow stone-paved lane.`}
+    />
+    <div class="grid gap-4 md:grid-cols-3">
+      {highlights.map((item) => (
+        <article class="paper-card kashi-pattern rounded-[1.7rem] p-6">
+          <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">{item.title}</h3>
+          <p class="mt-4 text-sm leading-7 text-[var(--muted)]">{item.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page grid gap-10 pb-20 lg:grid-cols-[.9fr_1.1fr]">
+    <div>
+      <SectionHeader eyebrow="BASIC" title="Before you go" description="The lane itself is small, but hours and closing days differ by shop. If you have a particular shop in mind, check on the day." />
+      <div class="flex flex-wrap gap-3">
+        <SaveButton id="kashiya-yokocho" title={st.attractionName} category="Main" note="A little candy, crackers, dumplings and sweet-potato sweets." lang={lang} />
+        <a href="/plan/" class="btn-secondary">View saved list</a>
+      </div>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {visitFacts.map((fact) => <InfoPill label={fact.label} value={fact.value} />)}
+    </div>
+  </section>
+
+  <WeatherForecast lang={lang} />
+
+  <section class="bg-[rgba(63,40,27,.96)] py-20 text-[#fff8ea]">
+    <div class="container-page">
+      <div class="grid gap-10 lg:grid-cols-[.78fr_1.22fr]">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">MODEL COURSE</p>
+          <h2 class="section-title mt-2 text-4xl font-black md:text-5xl">Suggested routes</h2>
+          <p class="mt-5 text-sm leading-8 text-[#f6ddb4]">The lane is rewarding even in a short visit, but to taste what Kawagoe is about, walk “{st.attractionName} + {st.nearbyLandmarks[0]} + the warehouse streets” as one continuous line.</p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-3">
+          {modelPlans.map((plan) => (
+            <article class="rounded-[1.6rem] border border-white/12 bg-white/8 p-5">
+              <h3 class="font-serif text-2xl font-bold">{plan.title}</h3>
+              <ol class="mt-5 grid gap-3 text-sm leading-6 text-[#f6ddb4]">
+                {plan.points.map((point, index) => <li><span class="mr-2 font-bold text-[#f6c96b]">{index + 1}.</span>{point}</li>)}
+              </ol>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-20">
+    <SectionHeader eyebrow="FOOD" title="Food nearby" description="Take a little of the sweets in the lane, then combine bakery, bagels, eel or Japanese restaurants nearby for lunch and breaks." />
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {foods.slice(0, 3).map((item) => <SpotCard item={item} lang={lang} />)}
+    </div>
+    <div class="mt-8"><a href="/en/food/" class="btn-primary">See more food nearby</a></div>
+  </section>
+
+  <section class="container-page pb-20">
+    <SectionHeader eyebrow="AROUND" title={`Nearby spots around ${st.attractionName}`} description="Kawagoe’s classic sights are clustered within walking distance. On busy days, do the lane early and the surrounding spots around midday." />
+    <p class="mb-8 max-w-3xl text-sm leading-8 text-[var(--muted)]">
+      Visiting {st.attractionName} pairs naturally with the historic landmarks nearby. In particular <strong class="font-bold text-[var(--wood)]">{st.nearbyLandmarks[0]}</strong> and <strong class="font-bold text-[var(--wood)]">{st.nearbyLandmarks[1]}</strong> are close to the lane and photograph beautifully.
+    </p>
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {nearbySpots.slice(0, 3).map((item) => <SpotCard item={item} lang={lang} />)}
+    </div>
+    <div class="mt-8"><a href="/en/nearby/" class="btn-secondary">See nearby spots</a></div>
+  </section>
+
+  <VisitorServices lang={lang} />
+
+  <Accessibility lang={lang} />
+
+  <SeasonalGuide lang={lang} />
+
+  <EventsCalendar lang={lang} />
+
+  <VisitorRoutes lang={lang} />
+
+  <section class="container-page pb-20">
+    <SectionHeader
+      eyebrow="HISTORY"
+      title={`History and meaning of ${st.attractionName}`}
+      description="How long the lane has existed, and why it became a lane that smells sweet — summarised from Kawagoe City and the tourism association."
+    />
+    <div class="grid gap-4 md:grid-cols-3">
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">A lane where confectioners gathered in the Taisho era</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">Confectioners and sweet wholesalers moved to Kawagoe from Tokyo and began making candy and dagashi — this is the origin most often described for the lane. It grew up alongside the memory of children stopping at dagashi shops on the walk home from school.</p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">Selected among Japan’s 100 Fragrant Landscapes (2001)</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">The smell of scorched soy sauce and the sweet scent of cinnamon and mint candy were recognised when the lane was chosen for the “100 Fragrant Landscapes” selection. That is why it is introduced as a lane remembered by scent.</p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">Stone paving and shopfronts still going</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">Around thirty sweet shops still line the narrow stone-paved lane. Walking it together with the warehouse district and the bell tower makes it part of a wider Little Edo Kawagoe stroll.</p>
+      </article>
+    </div>
+    <p class="mt-6 text-xs leading-6 text-[var(--muted)]">
+      History, selection and shop counts are summarised from public information by <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.cityTourismUrl} target="_blank" rel="noopener noreferrer">Kawagoe City↗</a> and <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.govtTourismUrl} target="_blank" rel="noopener noreferrer">{st.govtTourismName}↗</a>.
+    </p>
+    <div class="mt-5 flex flex-wrap gap-3">
+      <a href="/en/about/" class="btn-primary">Read the full history</a>
+      <a href="/en/methodology/" class="btn-secondary">Data &amp; method</a>
+    </div>
+  </section>
+
+  <VisitorResponsibility lang={lang} />
+
+  <section class="container-page grid gap-8 pb-20 lg:grid-cols-[.9fr_1.1fr]">
+    <div>
+      <SectionHeader eyebrow="MAP" title={`Location and access (${st.city})`} description="The lane is narrow, so check where your walking navigation drops you before looking for the entrance." />
+      <div class="rounded-3xl bg-[rgba(201,78,54,.09)] p-5 text-sm leading-7 text-[var(--muted)]">
+        <p class="font-bold text-[var(--wood)]">Address</p>
+        <p class="mt-1">{st.addressFull}</p>
+        <p class="mt-4 font-bold text-[var(--wood)]">Coordinates</p>
+        <p class="mt-1">{site.latitude}, {site.longitude}</p>
+      </div>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="btn-secondary" href={site.mapsShareUrl} target="_blank" rel="noopener noreferrer">View on Google Maps↗</a>
+        <a class="btn-secondary" href={site.officialUrl} target="_blank" rel="noopener noreferrer">Official site↗</a>
+        <a class="btn-secondary" href={site.govtTourismUrl} target="_blank" rel="noopener noreferrer">{st.govtTourismName}↗</a>
+      </div>
+    </div>
+    <GoogleMap lang={lang} />
+  </section>
+
+  <section class="container-page pb-20">
+    <SectionHeader eyebrow="FAQ" title="FAQ" description="Common questions about hours, admission, parking, families with children and the local save features." />
+    <div class="grid gap-4 md:grid-cols-2">
+      {faq.slice(0, 4).map((item) => (
+        <details class="paper-card rounded-3xl p-6">
+          <summary class="cursor-pointer font-serif text-xl font-bold text-[var(--wood)]">{item.q}</summary>
+          <p class="mt-4 text-sm leading-7 text-[var(--muted)]">{item.a}</p>
+        </details>
+      ))}
+    </div>
+    <div class="mt-8"><a href="/en/faq/" class="btn-secondary">See all FAQs</a></div>
+  </section>
+
+  <SourcesSection
+    title="Information sources"
+    description={`The rating, location, history and surroundings of ${st.attractionName} are compiled from Google Maps user ratings plus public information from authorities and official sites.`}
+    lang={lang}
+  />
+</Layout>

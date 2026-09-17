@@ -7,6 +7,13 @@ import SpotCard from '@components/SpotCard.astro';
 import GoogleMap from '@components/GoogleMap.astro';
 import GoogleRating from '@components/GoogleRating.astro';
 import SourcesSection from '@components/SourcesSection.astro';
+import WeatherForecast from '@components/WeatherForecast.astro';
+import VisitorServices from '@components/VisitorServices.astro';
+import SeasonalGuide from '@components/SeasonalGuide.astro';
+import VisitorRoutes from '@components/VisitorRoutes.astro';
+import VisitorResponsibility from '@components/VisitorResponsibility.astro';
+import EventsCalendar from '@components/EventsCalendar.astro';
+import Accessibility from '@components/Accessibility.astro';
 import SaveButton from '@components/SaveButton.astro';
 import { site } from '@config/site';
 import { buildStructuredData, foods, highlights, nearbySpots, visitFacts, faq, modelPlans, googleRating } from '@data/content';
@@ -94,9 +101,11 @@ const entityChain = [site.attractionName, site.city, site.region, site.country];
     <div class="grid gap-4 sm:grid-cols-2">
       {visitFacts.map((fact) => <InfoPill label={fact.label} value={fact.value} />)}
     </div>
-  </section>
+    </section>
 
-  <section class="bg-[rgba(63,40,27,.96)] py-20 text-[#fff8ea]">
+    <WeatherForecast />
+
+    <section class="bg-[rgba(63,40,27,.96)] py-20 text-[#fff8ea]">
     <div class="container-page">
       <div class="grid gap-10 lg:grid-cols-[.78fr_1.22fr]">
         <div>
@@ -137,6 +146,16 @@ const entityChain = [site.attractionName, site.city, site.region, site.country];
     <div class="mt-8"><a href="/nearby/" class="btn-secondary">周辺スポットを確認</a></div>
   </section>
 
+  <VisitorServices />
+
+  <Accessibility />
+
+  <SeasonalGuide />
+
+  <EventsCalendar />
+
+  <VisitorRoutes />
+
   <section class="container-page pb-20">
     <SectionHeader
       eyebrow="HISTORY"
@@ -160,7 +179,13 @@ const entityChain = [site.attractionName, site.city, site.region, site.country];
     <p class="mt-6 text-xs leading-6 text-[var(--muted)]">
       歴史・選定・店舗数は川越市・小江戸川越観光協会の公開情報をもとに整理しています（出典は<a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.cityTourismUrl} target="_blank" rel="noopener noreferrer">川越市のページ↗</a>・<a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.govtTourismUrl} target="_blank" rel="noopener noreferrer">{site.govtTourismName}↗</a>）。
     </p>
+    <div class="mt-5 flex flex-wrap gap-3">
+      <a href="/about/" class="btn-primary">歴史・背景を詳しく読む</a>
+      <a href="/methodology/" class="btn-secondary">データの集め方・更新方針</a>
+    </div>
   </section>
+
+  <VisitorResponsibility />
 
   <section class="container-page grid gap-8 pb-20 lg:grid-cols-[.9fr_1.1fr]">
     <div>

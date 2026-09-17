@@ -10,6 +10,9 @@ const title = '写真・情報クレジット';
 const description = `菓子屋横丁さんぽ手帖で利用した写真と情報参照元の一覧です。Google マップのユーザー評価（${googleRating.value} / 5・${googleRating.countLabel}件・同期時期 ${googleRating.syncedAt}）の出典も掲載しています。`;
 const structuredData = buildStructuredData('/credits/', title, description, [
   { name: 'ホーム', path: '/' },
+  { name: site.region },
+  { name: site.city },
+  { name: site.attractionName },
   { name: '写真・情報クレジット' },
 ]);
 ---

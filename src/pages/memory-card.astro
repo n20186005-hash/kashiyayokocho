@@ -8,7 +8,10 @@ const title = '旅の記念カード';
 const description = '写真・セルフィー・アルバム画像をブラウザ内のCanvasで菓子屋横丁の記念カードに合成し、1:1・縦型ポストカード・9:16で保存できます。写真は端末内だけで処理されます。';
 const today = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replaceAll('/', '.');
 ---
-<Layout title={title} description={description} structuredData={buildStructuredData('/memory-card/', title, description)}>
+<Layout title={title} description={description} structuredData={buildStructuredData('/memory-card/', title, description, [
+    { name: 'ホーム', path: '/' },
+    { name: '旅の記念カード' },
+  ])}>
   <PageHero
     compact
     eyebrow="CANVAS MEMORY CARD"

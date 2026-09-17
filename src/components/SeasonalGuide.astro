@@ -1,0 +1,43 @@
+---
+import SectionHeader from '@components/SectionHeader.astro';
+import { seasons as seasonsJa } from '@data/content';
+import { seasons as seasonsEn } from '@data/content.en';
+import { t, type Lang } from '@i18n/index';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'ja' } = Astro.props;
+const dict = t(lang).seasons;
+const seasons = lang === 'en' ? seasonsEn : seasonsJa;
+---
+
+<section class="container-page pb-20">
+  <SectionHeader eyebrow={dict.eyebrow} title={dict.title} description={dict.description} />
+  <div class="overflow-hidden rounded-[1.8rem] border border-[rgba(105,63,40,.18)] bg-white/70">
+    <table class="w-full border-collapse text-left text-sm">
+      <thead class="bg-[rgba(201,78,54,.1)] text-[var(--wood)]">
+        <tr>
+          <th class="px-4 py-3 font-bold">{dict.th.season}</th>
+          <th class="px-4 py-3 font-bold">{dict.th.climate}</th>
+          <th class="px-4 py-3 font-bold">{dict.th.clothes}</th>
+          <th class="px-4 py-3 font-bold">{dict.th.crowd}</th>
+          <th class="px-4 py-3 font-bold">{dict.th.tip}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          seasons.map((s, i) => (
+            <tr class:list={['align-top', i % 2 ? 'bg-white/40' : 'bg-white/70']}>
+              <td class="px-4 py-4 font-bold text-[var(--wood)]">{s.name}<span class="block text-xs font-normal text-[var(--muted)]">{s.months}</span></td>
+              <td class="px-4 py-4 leading-7 text-[var(--muted)]">{s.climate}</td>
+              <td class="px-4 py-4 leading-7 text-[var(--muted)]">{s.clothes}</td>
+              <td class="px-4 py-4 leading-7 text-[var(--muted)]">{s.crowd}</td>
+              <td class="px-4 py-4 leading-7 text-[var(--muted)]">{s.tip}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

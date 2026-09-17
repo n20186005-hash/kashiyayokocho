@@ -1,0 +1,117 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import GoogleMap from '@components/GoogleMap.astro';
+import SaveButton from '@components/SaveButton.astro';
+import Accessibility from '@components/Accessibility.astro';
+import { site } from '@config/site';
+import { siteText } from '@i18n/site';
+import { buildStructuredDataEn } from '@data/content.en';
+
+const lang = 'en' as const;
+const st = siteText(lang);
+const title = `Access & parking | ${st.attractionName} (${st.city})`;
+const description = `How to reach ${st.attractionName} by train, bus, on foot and by car, plus Kawagoe tourist parking, the busiest times and tips for rainy days.`;
+const structuredData = buildStructuredDataEn('/en/access/', title, description, [
+  { name: 'Home', path: '/en/' },
+  { name: st.attractionName },
+  { name: 'Access & parking' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData} lang={lang}>
+  <PageHero
+    compact
+    eyebrow="ACCESS"
+    title="Walk from the station, or take the bus to the lane entrance."
+    description={`${st.attractionName} sits just north of the kurazukuri warehouse district of Kawagoe. It is about a 15–20 minute walk from Hon-Kawagoe Station, or take a city bus from Kawagoe Station to the “Kashiya Yokocho” stop. By car, allow around 20 minutes from the Kawagoe interchange.`}
+    image="/images/kashiya-street.webp"
+    lang={lang}
+  />
+
+  <section class="container-page grid gap-8 pb-16 lg:grid-cols-3">
+    <article class="paper-card rounded-[1.7rem] p-6">
+      <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">AIRPORT</p>
+      <h2 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">From the airports</h2>
+      <p class="mt-4 text-sm leading-7 text-[var(--muted)]">From Haneda (HND), take a train into central Tokyo, then the Seibu Shinjuku Line or Tobu Tojo Line to Kawagoe. From Narita (NRT) the route is similar via central Tokyo. Airport limousine bus routes change by season — check official information on the day.</p>
+      <p class="mt-4 rounded-2xl bg-[rgba(201,78,54,.08)] p-4 text-sm font-bold text-[var(--wood)]">Guide: about 1.5–2 hours from Haneda / 2.5–3 hours from Narita</p>
+    </article>
+    <article class="paper-card rounded-[1.7rem] p-6">
+      <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">TRAIN</p>
+      <h2 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">Trains &amp; public transport</h2>
+      <p class="mt-4 text-sm leading-7 text-[var(--muted)]">About 15–20 minutes on foot from Hon-Kawagoe Station (Seibu Shinjuku Line), or take a city bus from Kawagoe Station (Tobu Tojo Line / JR) to the “Kashiya Yokocho” stop. Confirm routes and timetables with the operators.</p>
+      <p class="mt-4 rounded-2xl bg-[rgba(122,163,123,.13)] p-4 text-sm font-bold text-[var(--wood)]">Bus stop: Kashiya Yokocho — right by the lane</p>
+    </article>
+    <article class="paper-card rounded-[1.7rem] p-6">
+      <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">TAXI / CAR</p>
+      <h2 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">Taxi &amp; car</h2>
+      <p class="mt-4 text-sm leading-7 text-[var(--muted)]">A taxi from Hon-Kawagoe or Kawagoe Station takes only a few minutes — handy with luggage, small groups or in rain. By car, about 20 minutes from the Kawagoe interchange. Do not drive into the narrow lane; park and walk.</p>
+      <p class="mt-4 rounded-2xl bg-[rgba(215,166,65,.16)] p-4 text-sm font-bold text-[var(--wood)]">Arrive in the morning at weekends</p>
+    </article>
+  </section>
+
+  <section class="container-page grid gap-8 pb-16 lg:grid-cols-2">
+    <div class="paper-card rounded-[1.8rem] p-6 md:p-8">
+      <h2 class="font-serif text-2xl font-bold text-[var(--wood)]">Airport routes (outline)</h2>
+      <ol class="mt-5 grid gap-4 text-sm leading-7 text-[var(--muted)]">
+        <li><span class="mr-2 font-bold text-[var(--red)]">1</span>Haneda (HND): train towards Shinjuku / Ikebukuro → Seibu Shinjuku Line to Hon-Kawagoe, or Tobu Tojo Line to Kawagoe.</li>
+        <li><span class="mr-2 font-bold text-[var(--red)]">2</span>Narita (NRT): Keisei / JR into central Tokyo → then on to Kawagoe (longer journey).</li>
+        <li><span class="mr-2 font-bold text-[var(--red)]">3</span>Once in Kawagoe, walk from Hon-Kawagoe Station, or take the bus to “Kashiya Yokocho”.</li>
+      </ol>
+      <p class="mt-4 text-xs text-[var(--muted)]">Journey times vary with connections and crowding. Check fares and timetables with each operator.</p>
+    </div>
+    <div class="paper-card rounded-[1.8rem] p-6 md:p-8">
+      <h2 class="font-serif text-2xl font-bold text-[var(--wood)]">Walking routes from the stations</h2>
+      <ul class="mt-5 grid gap-4 text-sm leading-7 text-[var(--muted)]">
+        <li><span class="mr-2 font-bold text-[var(--red)]">・</span>Hon-Kawagoe Station: walk through the warehouse district to the lane (about 15–20 minutes).</li>
+        <li><span class="mr-2 font-bold text-[var(--red)]">・</span>Kawagoe Station: bus to “Kashiya Yokocho”, or about 20–25 minutes on foot via the warehouse area.</li>
+        <li><span class="mr-2 font-bold text-[var(--red)]">・</span>Inside the lane the paving is narrow and uneven — give others room with pushchairs or large bags.</li>
+      </ul>
+      <p class="mt-4 text-xs text-[var(--muted)]">Taxis reach the area from either station in a few minutes — convenient in rain or when short on time.</p>
+    </div>
+  </section>
+
+  <section class="container-page grid gap-10 pb-20 lg:grid-cols-[.85fr_1.15fr]">
+    <div>
+      <SectionHeader eyebrow="PARKING" title="Parking" description="Rather than relying on a large dedicated car park for the lane, plan around Kawagoe city tourist car parks and nearby coin parking." />
+      <div class="grid gap-4">
+        <div class="rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/70 p-5">
+          <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">Kawagoe tourist car park</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--muted)]">A public car park shared with the JA Irumano farm-products direct sales site. Free, roughly 09:30–18:00, but it is a bit of a walk from the lane.</p>
+        </div>
+        <div class="rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/70 p-5">
+          <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">City hall north &amp; south car parks</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--muted)]">Sometimes available to visitors on weekends, public holidays and the New Year period. Paid, and conditions change by season — check the on-site signage.</p>
+        </div>
+        <div class="rounded-3xl border border-[rgba(105,63,40,.18)] bg-white/70 p-5">
+          <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">Coin parking</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--muted)]">Dotted around Ichibangai, the city hall and Hon-Kawagoe Station. Parking a little further away and walking is usually smoother than driving into narrow lanes.</p>
+        </div>
+      </div>
+    </div>
+    <div class="wood-card rounded-[2rem] p-8">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">LOCAL TIP</p>
+      <h2 class="section-title mt-3 text-4xl font-black">At weekends, switch to “walking Kawagoe”.</h2>
+      <p class="mt-5 text-sm leading-8 text-[#f6ddb4]">Driving between short hops in the historic centre makes timing unpredictable. Enter the warehouse district from a station or car park, then link {st.attractionName}, {st.nearbyLandmarks[0]} and the festival museum on foot.</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <SaveButton id="kashiya-yokocho" title={st.attractionName} category="Main" note="Photo at the lane entrance first, then candy and sweet-potato sweets." lang={lang} />
+        <SaveButton id="toki-no-kane" title={st.nearbyLandmarks[0]} category="Nearby spot" note="Within walking distance of the lane." lang={lang} />
+      </div>
+    </div>
+  </section>
+
+  <Accessibility lang={lang} />
+
+  <section class="container-page grid gap-8 pb-20 lg:grid-cols-[.9fr_1.1fr]">
+    <div>
+      <SectionHeader eyebrow="MAP" title="Check on a map" description="The embedded map is set to the Japan region." />
+      <dl class="grid gap-3 text-sm leading-7">
+        <div class="rounded-2xl bg-white/70 p-4"><dt class="font-bold text-[var(--wood)]">Address</dt><dd class="text-[var(--muted)]">{st.addressFull}</dd></div>
+        <div class="rounded-2xl bg-white/70 p-4"><dt class="font-bold text-[var(--wood)]">Coordinates</dt><dd class="text-[var(--muted)]">{site.latitude}, {site.longitude}</dd></div>
+        <div class="rounded-2xl bg-white/70 p-4"><dt class="font-bold text-[var(--wood)]">Enquiries (guide)</dt><dd class="text-[var(--muted)]">{site.phone}</dd></div>
+      </dl>
+    </div>
+    <GoogleMap lang={lang} />
+  </section>
+</Layout>

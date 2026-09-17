@@ -1,0 +1,141 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import { site } from '@config/site';
+import { buildStructuredData, googleRating } from '@data/content';
+
+const title = `データと方法｜${site.attractionName}（${site.city}）`;
+const description = `${site.attractionName}ガイドが、評価・営業時間・天気・周辺情報をどこから取得し、どう検証・更新しているかを公開する透明性ページです。端末内で動く機能（旅のリスト・記念カード）の扱いも説明します。`;
+const structuredData = buildStructuredData('/methodology/', title, description, [
+  { name: 'ホーム', path: '/' },
+  { name: site.region },
+  { name: site.city },
+  { name: site.attractionName },
+  { name: 'データと方法' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData}>
+  <PageHero
+    eyebrow="METHODOLOGY"
+    title="データの集め方と更新方針"
+    description="本サイトは非公式の旅行者向けガイドです。何を根拠に情報を載せ、どこまでを保証しないのかを明示します。"
+    image="/images/kashiya-street.webp"
+    imageAlt="川越の町並みと石畳の通り"
+    compact
+  />
+
+  <section class="container-page pb-16">
+    <SectionHeader
+      eyebrow="SOURCES"
+      title="使用している情報源"
+      description="一次情報（公的機関・公式サイト）を優先し、評価や混雑傾向などは利用者の集合知を出典付きで引用しています。"
+    />
+    <div class="overflow-hidden rounded-[1.8rem] border border-[rgba(105,63,40,.18)] bg-white/70">
+      <table class="w-full border-collapse text-left text-sm">
+        <thead class="bg-[rgba(201,78,54,.1)] text-[var(--wood)]">
+          <tr>
+            <th class="px-4 py-3 font-bold">項目</th>
+            <th class="px-4 py-3 font-bold">出典</th>
+            <th class="px-4 py-3 font-bold">扱い</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="align-top bg-white/70">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">ユーザー評価</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.mapsShareUrl} target="_blank" rel="noopener noreferrer">Google マップ（Google Maps）↗</a>
+            </td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              {googleRating.value} / 5（{googleRating.countLabel}件）を同期時期 {googleRating.syncedAt} 時点で引用。評価は常に変動するため、最新値は出典で確認してください。著作権は投稿者本人および Google マップに帰属します。
+            </td>
+          </tr>
+          <tr class="align-top bg-white/40">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">所在地・座標・歴史</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.cityTourismUrl} target="_blank" rel="noopener noreferrer">川越市↗</a>
+            </td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">公的機関の公開情報をもとに、確実な範囲で要約。解釈や推測は加えていません。</td>
+          </tr>
+          <tr class="align-top bg-white/70">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">周辺スポット・回遊ルート</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.govtTourismUrl} target="_blank" rel="noopener noreferrer">{site.govtTourismName}↗</a>
+            </td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">徒歩分数は目安であり、信号待ち・混雑・撮影時間を含みません。</td>
+          </tr>
+          <tr class="align-top bg-white/40">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">天気と過ごし方</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">Open-Meteo（気象予測API）</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              現地の現在値と向こう7日の予測を取得し、条件に応じた行動アドバイスを自動生成しています。予測であるため、外出前に気象庁など一次情報での最終確認をおすすめします。
+            </td>
+          </tr>
+          <tr class="align-top bg-white/70">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">営業時間・定休日</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">各店舗の掲示・公式情報</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">店ごとに異なるため、本サイトでは「目安」としてのみ掲載しています。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="container-page pb-20">
+    <SectionHeader
+      eyebrow="PRIVACY BY DESIGN"
+      title="端末内で動く機能"
+      description="旅のリストと記念カードは、サーバーに何も送らない設計です。"
+    />
+    <div class="grid gap-4 md:grid-cols-3">
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-3xl">🧺</p>
+        <h3 class="mt-3 font-serif text-xl font-bold text-[var(--wood)]">旅のリスト</h3>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          追加したスポットはブラウザの localStorage に保存されます。端末・ブラウザをまたいだ同期や、サーバーへの送信は行いません。ブラウザのデータを削除すると一緒に消えます。
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-3xl">🎴</p>
+        <h3 class="mt-3 font-serif text-xl font-bold text-[var(--wood)]">記念カード</h3>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          選んだ写真とフレームの合成は、端末上の Canvas で処理します。画像はアップロードされず、外部に保存されません。
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-3xl">📊</p>
+        <h3 class="mt-3 font-serif text-xl font-bold text-[var(--wood)]">アクセス解析</h3>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          ページビュー等の統計目的で Google アナリティクス（GA4）を使用しています。詳細は<a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href="/privacy/">プライバシーページ</a>をご確認ください。
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="bg-[rgba(63,40,27,.96)] py-20 text-[#fff8ea]">
+    <div class="container-page grid gap-10 lg:grid-cols-2">
+      <div>
+        <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">UPDATE POLICY</p>
+        <h2 class="section-title mt-3 text-4xl font-black">更新と限界</h2>
+        <ul class="mt-6 grid gap-3 text-sm leading-8 text-[#f6ddb4]">
+          <li>• ユーザー評価は定期的に再同期しますが、常に最新とは限りません。</li>
+          <li>• 営業時間・料金・イベント日程は変更されるため、訪問前に必ず一次情報で確認してください。</li>
+          <li>• 徒歩分数・滞在時間は目安であり、実際の混雑状況により大きく変わります。</li>
+          <li>• 店舗の優劣や順位づけを行わないため、特定店舗の推奨は行っていません。</li>
+        </ul>
+      </div>
+      <div class="rounded-[1.6rem] bg-white/8 p-6">
+        <h3 class="font-serif text-2xl font-bold">非公式ガイドであること</h3>
+        <p class="mt-4 text-sm leading-8 text-[#f6ddb4]">
+          本サイトは{site.attractionName}および各店舗・自治体の公式サイトではありません。公開情報をもとに旅行者の判断を助けることを目的としています。内容の正確性は出典元の記載に依存し、本サイトが保証するものではありません。
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a class="btn-secondary border-white/30 bg-white/10 !text-[#fff8ea]" href={site.officialUrl} target="_blank" rel="noopener noreferrer">公式サイト↗</a>
+          <a class="btn-secondary border-white/30 bg-white/10 !text-[#fff8ea]" href="/credits/">写真・情報ソース</a>
+          <a class="btn-secondary border-white/30 bg-white/10 !text-[#fff8ea]" href="/privacy/">プライバシー</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

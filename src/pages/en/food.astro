@@ -1,0 +1,54 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import SpotCard from '@components/SpotCard.astro';
+import { siteText } from '@i18n/site';
+import { buildStructuredDataEn, foods } from '@data/content.en';
+
+const lang = 'en' as const;
+const st = siteText(lang);
+const title = `Food nearby | ${st.attractionName}`;
+const description = 'Dagashi, sweet-potato sweets, bakery, bagels, eel and Japanese restaurants to combine with a walk through Kashiya Yokocho, from a traveller’s point of view.';
+const structuredData = buildStructuredDataEn('/en/food/', title, description, [
+  { name: 'Home', path: '/en/' },
+  { name: st.attractionName },
+  { name: 'Food nearby' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData} lang={lang}>
+  <PageHero
+    compact
+    eyebrow="FOOD"
+    title="Add a Kawagoe lunch to the sweet lane."
+    description="Take candy, rice crackers, dumplings and sweet-potato sweets a little at a time in the lane. For lunch and breaks, combine a nearby bakery, bagel shop, eel restaurant or Japanese restaurant and a half-day walk stays comfortable."
+    image="/images/kashiya-busy.webp"
+    lang={lang}
+  />
+
+  <section class="container-page pb-16">
+    <SectionHeader eyebrow="PICKUP" title="Food list nearby" description="Hours, closing days and sell-outs vary by shop. If you have a target shop, check its status that morning." />
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {foods.map((item) => <SpotCard item={item} lang={lang} />)}
+    </div>
+  </section>
+
+  <section class="container-page grid gap-6 pb-20 lg:grid-cols-3">
+    <article class="wood-card rounded-[2rem] p-7">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">SWEETS</p>
+      <h2 class="section-title mt-3 text-3xl font-black">Small amounts in the lane</h2>
+      <p class="mt-4 text-sm leading-8 text-[#f6ddb4]">Buying candy, crackers, fu-gashi, dumplings and sweet-potato sweets all at once makes walking awkward. Do one loop first, then return to whatever caught your eye.</p>
+    </article>
+    <article class="paper-card rounded-[2rem] p-7">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[var(--red)]">LUNCH</p>
+      <h2 class="section-title mt-3 text-3xl font-black text-[var(--wood)]">Eat lunch early</h2>
+      <p class="mt-4 text-sm leading-8 text-[var(--muted)]">Queues build from late morning at weekends in Kawagoe. Aim for opening time for eel and Japanese restaurants; bakeries and takeaway give you more flexibility.</p>
+    </article>
+    <article class="paper-card rounded-[2rem] p-7">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[var(--red)]">CASH</p>
+      <h2 class="section-title mt-3 text-3xl font-black text-[var(--wood)]">Keep small change handy</h2>
+      <p class="mt-4 text-sm leading-8 text-[var(--muted)]">Small confectioners may have limited payment options. Carrying a few 100- and 500-yen coins makes browsing the dagashi shops much smoother.</p>
+    </article>
+  </section>
+</Layout>

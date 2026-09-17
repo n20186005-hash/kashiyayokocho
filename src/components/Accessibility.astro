@@ -1,0 +1,28 @@
+---
+import SectionHeader from '@components/SectionHeader.astro';
+import { accessibility as itemsJa } from '@data/content';
+import { accessibility as itemsEn } from '@data/content.en';
+import { t, type Lang } from '@i18n/index';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'ja' } = Astro.props;
+const dict = t(lang).accessibility;
+const items = lang === 'en' ? itemsEn : itemsJa;
+---
+
+<section class="container-page pb-20">
+  <SectionHeader eyebrow={dict.eyebrow} title={dict.title} description={dict.description} />
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    {
+      items.map((item) => (
+        <article class="rounded-[1.6rem] border border-[rgba(105,63,40,.18)] bg-white/70 p-6">
+          <p class="text-3xl">{item.icon}</p>
+          <h3 class="mt-3 font-serif text-xl font-bold text-[var(--wood)]">{item.title}</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--muted)]">{item.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

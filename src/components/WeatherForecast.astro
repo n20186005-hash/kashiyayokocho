@@ -1,0 +1,187 @@
+---
+import { site } from '@config/site';
+import { getWeather, formatDate, weekdayShort, type WeatherData } from '@lib/weather';
+import { describeCode } from '@lib/wmo';
+import { buildAdvice, renderAdvice } from '@lib/weatherAdvice';
+import { siteText } from '@i18n/site';
+import { t, type Lang } from '@i18n/index';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'ja' } = Astro.props;
+const dict = t(lang).weather;
+const name = siteText(lang).attractionName;
+
+// サーバー側で天気を取得（キャッシュ付き・取得失敗時はフォールバック）。
+const weather: WeatherData = await getWeather(site.latitude, site.longitude);
+const current = describeCode(weather.now.code, weather.now.isDay, lang);
+
+// 今日のデータから「行動アドバイス」を組み立て（サーバー側で描画）。
+const today = weather.days[0];
+const advice = buildAdvice(
+  {
+    code: weather.now.code,
+    isDay: weather.now.isDay,
+    tempC: weather.now.temperature,
+    apparent: weather.now.apparent,
+    windMs: weather.now.wind,
+    humidity: weather.now.humidity,
+    pop: today?.pop ?? null,
+    uvMax: today?.uv ?? null,
+    tmax: today?.tmax ?? weather.now.temperature,
+    tmin: today?.tmin ?? weather.now.temperature,
+  },
+  lang,
+);
+---
+
+<section class="container-page pb-20">
+  <div
+    class="rounded-[2rem] bg-[rgba(63,40,27,.97)] p-6 text-[#fff8ea] md:p-8"
+    id="weather"
+    data-lat={site.latitude}
+    data-lon={site.longitude}
+    data-lang={lang}
+  >
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">{dict.eyebrow}</p>
+        <h2 class="section-title mt-2 text-3xl font-black md:text-4xl">{name}{dict.titleSuffix}</h2>
+      </div>
+      <p class="text-xs text-[#f6ddb4]" data-updated>
+        {weather.ok ? dict.localTime : dict.unavailable}
+      </p>
+    </div>
+
+    {
+      weather.ok ? (
+        <>
+          <div class="mt-6 grid gap-6 lg:grid-cols-[.8fr_1.2fr]">
+            <div class="flex items-center gap-5 rounded-2xl bg-white/8 p-5">
+              <span class="text-6xl leading-none" data-now-icon>{current.icon}</span>
+              <div>
+                <p class="text-5xl font-black" data-now-temp>{weather.now.temperature}<span class="text-2xl">℃</span></p>
+                <p class="mt-1 text-sm text-[#f6ddb4]" data-now-label>{current.label}</p>
+                <p class="mt-2 text-xs text-[#f6ddb4]">
+                  {dict.feels} <span data-now-apparent>{weather.now.apparent}</span>℃ ・ {dict.humidity} <span data-now-humidity>{weather.now.humidity}</span>% ・ {dict.wind} <span data-now-wind>{weather.now.wind}</span>m/s
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <p class="mb-3 text-xs font-bold uppercase tracking-[.2em] text-[#f6c96b]">{dict.next7}</p>
+              <ul class="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7" data-forecast>
+                {weather.days.map((day, i) => {
+                  const w = describeCode(day.code, true, lang);
+                  const [, mm, dd] = day.date.split('-');
+                  const monthDay = `${Number(mm)}/${Number(dd)}`;
+                  return (
+                    <li class="rounded-2xl bg-white/8 p-3 text-center">
+                      <p class="text-xs font-bold text-[#f6ddb4]">
+                        {i === 0 ? dict.today : `${monthDay} ${weekdayShort(day.date, lang)}`}
+                      </p>
+                      <p class="my-2 text-3xl">{w.icon}</p>
+                      <p class="text-sm font-bold" data-forecast-label={i}>{w.label}</p>
+                      <p class="mt-1 text-xs text-[#f6ddb4]">{day.tmax}℃ / {day.tmin}℃</p>
+                      {day.pop != null && (
+                        <p class="mt-1 text-[11px] text-[#f6c96b]">{dict.precip} {day.pop}%</p>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+              <p class="mt-3 text-xs text-[#f6ddb4]">{dict.celsiusNote}</p>
+            </div>
+          </div>
+
+          <div id="weather-advice" set:html={renderAdvice(advice, lang)} />
+        </>
+      ) : (
+        <p class="mt-6 text-sm text-[#f6ddb4]">{dict.error}</p>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  import { buildAdvice, renderAdvice } from '@lib/weatherAdvice';
+  import { describeCode, type Lang } from '@lib/wmo';
+  import { t } from '@i18n/index';
+
+  // クライアント側で最新の現地天気を取得し、表示を更新する（サイト訪問時に近い値を表示）。
+  const root = document.getElementById('weather') as HTMLElement | null;
+  if (root) {
+    const lat = parseFloat(root.dataset.lat || '0');
+    const lon = parseFloat(root.dataset.lon || '0');
+    const lang = (root.dataset.lang === 'en' ? 'en' : 'ja') as Lang;
+    const dict = t(lang).weather;
+
+    const set = (sel: string, value: string) => {
+      const el = root.querySelector(sel);
+      if (el) el.textContent = value;
+    };
+    const refresh = async () => {
+      try {
+        const url =
+          'https://api.open-meteo.com/v1/forecast' +
+          `?latitude=${lat}&longitude=${lon}` +
+          '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,is_day' +
+          '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max' +
+          '&timezone=Asia%2FTokyo&forecast_days=1&wind_speed_unit=ms';
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) return;
+        const j = await res.json();
+        const c = j.current || {};
+        const d = j.daily || {};
+        const code = Math.round(c.weather_code ?? 0);
+        const isDay = c.is_day !== 0;
+        const info = describeCode(code, isDay, lang);
+        set('[data-now-temp]', `${Math.round(c.temperature_2m ?? 0)}`);
+        set('[data-now-label]', info.label);
+        set('[data-now-icon]', info.icon);
+        set('[data-now-apparent]', `${Math.round(c.apparent_temperature ?? c.temperature_2m ?? 0)}`);
+        set('[data-now-humidity]', `${Math.round(c.relative_humidity_2m ?? 0)}`);
+        set('[data-now-wind]', `${Math.round((c.wind_speed_10m ?? 0) * 10) / 10}`);
+
+        const advice = buildAdvice(
+          {
+            code,
+            isDay,
+            tempC: Math.round(c.temperature_2m ?? 0),
+            apparent: Math.round(c.apparent_temperature ?? c.temperature_2m ?? 0),
+            windMs: Math.round((c.wind_speed_10m ?? 0) * 10) / 10,
+            humidity: Math.round(c.relative_humidity_2m ?? 0),
+            pop:
+              d.precipitation_probability_max && d.precipitation_probability_max[0] != null
+                ? d.precipitation_probability_max[0]
+                : null,
+            uvMax: d.uv_index_max && d.uv_index_max[0] != null ? d.uv_index_max[0] : null,
+            tmax:
+              d.temperature_2m_max && d.temperature_2m_max[0] != null
+                ? Math.round(d.temperature_2m_max[0])
+                : Math.round(c.temperature_2m ?? 0),
+            tmin:
+              d.temperature_2m_min && d.temperature_2m_min[0] != null
+                ? Math.round(d.temperature_2m_min[0])
+                : Math.round(c.temperature_2m ?? 0),
+          },
+          lang,
+        );
+        const box = document.getElementById('weather-advice');
+        if (box) box.innerHTML = renderAdvice(advice, lang);
+
+        const upd = root.querySelector('[data-updated]');
+        if (upd) {
+          upd.textContent = `${dict.updated} ${new Date().toLocaleTimeString(lang === 'en' ? 'en-GB' : 'ja-JP', {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}`;
+        }
+      } catch {
+        /* 取得失敗時はサーバー側の表示を維持 */
+      }
+    };
+    refresh();
+  }
+</script>

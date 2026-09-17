@@ -8,7 +8,10 @@ import { buildStructuredData, modelPlans, tripSeedItems } from '@data/content';
 const title = '旅のリスト';
 const description = '菓子屋横丁と周辺スポットをlocalStorageに保存して、自分だけの川越散策リストを作れます。データは現在の端末にだけ保存されます。';
 ---
-<Layout title={title} description={description} structuredData={buildStructuredData('/plan/', title, description)}>
+<Layout title={title} description={description} structuredData={buildStructuredData('/plan/', title, description, [
+    { name: 'ホーム', path: '/' },
+    { name: '旅のリスト' },
+  ])}>
   <PageHero
     compact
     eyebrow="LOCAL STORAGE PLAN"

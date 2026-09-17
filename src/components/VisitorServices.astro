@@ -1,0 +1,29 @@
+---
+import SectionHeader from '@components/SectionHeader.astro';
+import { services as servicesJa } from '@data/content';
+import { services as servicesEn } from '@data/content.en';
+import { t, type Lang } from '@i18n/index';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'ja' } = Astro.props;
+const dict = t(lang).services;
+// 非営利の案内として、特定の店舗・施設名は挙げず「タイプ」で中立的に案内する。
+const services = lang === 'en' ? servicesEn : servicesJa;
+---
+
+<section class="container-page pb-20">
+  <SectionHeader eyebrow={dict.eyebrow} title={dict.title} description={dict.description} />
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      services.map((s) => (
+        <article class="paper-card rounded-[1.6rem] p-6">
+          <p class="text-3xl">{s.icon}</p>
+          <h3 class="mt-3 font-serif text-xl font-bold text-[var(--wood)]">{s.title}</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--muted)]">{s.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

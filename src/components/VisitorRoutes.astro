@@ -1,0 +1,49 @@
+---
+import SectionHeader from '@components/SectionHeader.astro';
+import { audienceRoutes as audienceJa, standardRoutes as standardJa } from '@data/content';
+import { audienceRoutes as audienceEn, standardRoutes as standardEn } from '@data/content.en';
+import { t, type Lang } from '@i18n/index';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'ja' } = Astro.props;
+const dict = t(lang).routes;
+const audienceRoutes = lang === 'en' ? audienceEn : audienceJa;
+const standardRoutes = lang === 'en' ? standardEn : standardJa;
+---
+
+<section class="container-page pb-20">
+  <SectionHeader eyebrow={dict.eyebrow} title={dict.title} description={dict.description} />
+
+  <p class="mb-4 text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">{dict.audienceLabel}</p>
+  <div class="grid gap-4 md:grid-cols-3">
+    {
+      audienceRoutes.map((r) => (
+        <article class="paper-card rounded-[1.7rem] p-6">
+          <p class="text-3xl">{r.icon}</p>
+          <h3 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">{r.title}</h3>
+          <p class="mt-2 text-sm font-bold text-[var(--red)]">{r.lead}</p>
+          <ol class="mt-4 grid gap-2 text-sm leading-7 text-[var(--muted)]">
+            {r.points.map((p, i) => (
+              <li><span class="mr-2 font-bold text-[var(--wood)]">{i + 1}.</span>{p}</li>
+            ))}
+          </ol>
+        </article>
+      ))
+    }
+  </div>
+
+  <p class="mb-4 mt-10 text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">{dict.standardLabel}</p>
+  <div class="grid gap-4 md:grid-cols-2">
+    {
+      standardRoutes.map((r) => (
+        <article class="rounded-[1.7rem] border border-[rgba(105,63,40,.18)] bg-white/70 p-6">
+          <p class="text-3xl">{r.icon}</p>
+          <h3 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">{r.title}</h3>
+          <p class="mt-3 text-sm leading-7 text-[var(--muted)]">{r.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>

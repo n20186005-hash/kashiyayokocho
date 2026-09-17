@@ -5,11 +5,14 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@config/*": ["src/config/*"],
+      "@lib/*": ["src/lib/*"],
       "@data/*": ["src/data/*"],
+      "@i18n/*": ["src/i18n/*"],
       "@layouts/*": ["src/layouts/*"],
       "@scripts/*": ["src/scripts/*"],
       "@styles/*": ["src/styles/*"]
     },
     "types": ["astro/client"]
-  }
+  },
+  "exclude": ["node_modules", "node_modules_old", "dist", ".astro"]
 }

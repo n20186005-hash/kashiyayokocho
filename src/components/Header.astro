@@ -1,19 +1,39 @@
 ---
-import { navItems, site } from '@config/site';
-const currentPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+import { siteText } from '@i18n/site';
+import {
+  LANGUAGES,
+  LANG_META,
+  alternateHref,
+  getLangFromPath,
+  navItems,
+  t,
+  type Lang,
+} from '@i18n/index';
+
+interface Props {
+  lang?: Lang;
+}
+const path = Astro.url.pathname;
+const { lang } = Astro.props;
+const current: Lang = lang ?? getLangFromPath(path);
+const dict = t(current);
+const st = siteText(current);
+const items = navItems[current];
+const currentPath = path.endsWith('/') ? path : `${path}/`;
 ---
+
 <header class="sticky top-0 z-40 border-b border-[rgba(105,63,40,.14)] bg-[#fff8ea]/88 backdrop-blur-xl">
   <div class="container-page flex items-center justify-between gap-4 py-3">
-    <a href="/" class="group flex min-w-0 items-center gap-3" aria-label={`${site.name} トップへ`}>
+    <a href={current === 'en' ? '/en/' : '/'} class="group flex min-w-0 items-center gap-3" aria-label={`${st.name} ${dict.header.homeAria}`}>
       <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[var(--wood)] text-xl text-[#fff8ea] shadow-lg shadow-[rgba(63,40,27,.2)]">菓</span>
       <span class="min-w-0">
-        <span class="block truncate font-serif text-lg font-bold tracking-[.08em] text-[var(--wood)]">{site.name}</span>
-        <span class="block truncate text-xs text-[var(--muted)]">{site.tagline}</span>
+        <span class="block truncate font-serif text-lg font-bold tracking-[.08em] text-[var(--wood)]">{st.name}</span>
+        <span class="block truncate text-xs text-[var(--muted)]">{st.tagline}</span>
       </span>
     </a>
-    <nav class="hidden items-center gap-1 lg:flex" aria-label="主なページ">
-      {navItems.map((item) => {
-        const isActive = item.href === '/' ? currentPath === '/' : currentPath === item.href;
+    <nav class="hidden items-center gap-1 lg:flex" aria-label={dict.header.mainNav}>
+      {items.map((item) => {
+        const isActive = item.href === '/' || item.href === '/en/' ? currentPath === item.href : currentPath === item.href;
         return (
           <a
             href={item.href}
@@ -29,11 +49,29 @@ const currentPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${A
           </a>
         );
       })}
+      <span class="ml-2 flex items-center gap-1 border-l border-[rgba(105,63,40,.18)] pl-3" aria-label={dict.lang.switchLabel}>
+        {LANGUAGES.map((code) => (
+          <a
+            href={alternateHref(path, code)}
+            hreflang={code}
+            lang={LANG_META[code].htmlLang}
+            aria-current={code === current ? 'true' : undefined}
+            class:list={[
+              'rounded-full px-2.5 py-1 text-xs font-black tracking-[.08em] transition',
+              code === current
+                ? 'bg-[rgba(185,71,50,.14)] text-[var(--red)]'
+                : 'text-[var(--muted)] hover:bg-[rgba(105,63,40,.1)]',
+            ]}
+          >
+            {LANG_META[code].short}
+          </a>
+        ))}
+      </span>
     </nav>
   </div>
-  <nav class="container-page flex gap-2 overflow-x-auto pb-3 lg:hidden" aria-label="スマートフォン用ページ">
-    {navItems.map((item) => {
-      const isActive = item.href === '/' ? currentPath === '/' : currentPath === item.href;
+  <nav class="container-page flex gap-2 overflow-x-auto pb-3 lg:hidden" aria-label={dict.header.mobileNav}>
+    {items.map((item) => {
+      const isActive = currentPath === item.href;
       return (
         <a
           href={item.href}
@@ -49,5 +87,20 @@ const currentPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${A
         </a>
       );
     })}
+    {LANGUAGES.map((code) => (
+      <a
+        href={alternateHref(path, code)}
+        hreflang={code}
+        lang={LANG_META[code].htmlLang}
+        class:list={[
+          'shrink-0 rounded-full border px-3 py-1.5 text-xs font-black tracking-[.08em]',
+          code === current
+            ? 'border-[rgba(185,71,50,.4)] bg-[rgba(185,71,50,.12)] text-[var(--red)]'
+            : 'border-[rgba(105,63,40,.18)] bg-white/58 text-[var(--muted)]',
+        ]}
+      >
+        {LANG_META[code].short}
+      </a>
+    ))}
   </nav>
 </header>

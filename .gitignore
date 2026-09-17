@@ -1,24 +1,26 @@
-# Dependencies
+# ===== Dependencies（依赖，不需要上传） =====
 node_modules/
 node_modules_old/
+.pnpm-store/
 
-# Build outputs
+# ===== Build outputs（构建产物，部署用 dist 由 CI 生成） =====
 dist/
 .output/
-
-# Astro
+.build/
 .astro/
 
-# Wrangler / Cloudflare
+# ===== Wrangler / Cloudflare（部署相关本地状态） =====
 .wrangler/
+.cloudflare/
 .dev.vars
+.dev.vars.*
 
-# Environment variables
+# ===== Environment variables（密钥不要上传） =====
 .env
 .env.*
 !.env.example
 
-# Logs
+# ===== Logs =====
 logs/
 *.log
 npm-debug.log*
@@ -27,7 +29,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# OS generated files
+# ===== OS generated files =====
 .DS_Store
 .DS_Store?
 ._*
@@ -36,7 +38,7 @@ lerna-debug.log*
 ehthumbs.db
 Thumbs.db
 
-# Editor directories and files
+# ===== Editor directories and files =====
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -45,17 +47,22 @@ Thumbs.db
 *.swo
 *~
 
-# TypeScript cache
+# ===== TypeScript / tooling cache =====
 *.tsbuildinfo
+.eslintcache
+.stylelintcache
 
-# pnpm
-.pnpm-store/
-
-# Testing
+# ===== Testing / coverage =====
 coverage/
 .nyc_output/
 
-# Temporary files
+# ===== Temporary files =====
 *.tmp
 *.temp
 .cache/
+tmp-*.mjs
+tmp-*.js
+
+# ===== Service worker（由构建生成，不手写上传） =====
+/sw.js
+/sw.js.map

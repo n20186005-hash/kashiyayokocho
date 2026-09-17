@@ -6,7 +6,10 @@ import { buildStructuredData } from '@data/content';
 
 const title = 'プライバシー';
 const description = '菓子屋横丁さんぽ手帖のプライバシー方針。旅のリストと記念カードはブラウザ内で処理し、写真やメモをサーバーへ送信しません。';
-const structuredData = buildStructuredData('/privacy/', title, description);
+const structuredData = buildStructuredData('/privacy/', title, description, [
+  { name: 'ホーム', path: '/' },
+  { name: 'プライバシー' },
+]);
 ---
 <Layout title={title} description={description} structuredData={structuredData}>
   <PageHero

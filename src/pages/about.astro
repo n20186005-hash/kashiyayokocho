@@ -1,0 +1,173 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import GoogleRating from '@components/GoogleRating.astro';
+import SourcesSection from '@components/SourcesSection.astro';
+import SaveButton from '@components/SaveButton.astro';
+import { site } from '@config/site';
+import { buildStructuredData } from '@data/content';
+
+const title = `歴史・背景｜${site.attractionName}（${site.city}）`;
+const description = `${site.attractionName}（${site.city}）の成り立ちを、大正期の菓子職人の移住、関東大震災後の駄菓子づくり、平成13年の「かおり風景100選」選定、現在の石畳の景観まで、川越市・観光協会の公開情報をもとに整理した解説ページです。`;
+const structuredData = buildStructuredData('/about/', title, description, [
+  { name: 'ホーム', path: '/' },
+  { name: site.region },
+  { name: site.city },
+  { name: site.attractionName },
+  { name: '歴史・背景' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData}>
+  <PageHero
+    eyebrow="HISTORY"
+    title={`${site.attractionName}の歴史と背景`}
+    description={`甘い香りのする石畳の路地が、なぜ${site.city}に生まれたのか。大正期の職人の移住から、「かおり風景100選」への選定、そして現在の景観までを順にたどります。`}
+    image="/images/kashiya-noren.webp"
+    imageAlt={`${site.attractionName}の店先に並ぶ暖簾と駄菓子の風景`}
+    compact
+  />
+
+  <section class="container-page pb-16">
+    <SectionHeader
+      eyebrow="ORIGIN"
+      title="はじまり：大正期、菓子職人が集まった路地"
+      description={`${site.attractionName}のルーツは、江戸時代ではなく大正期以降にあると伝えられています。町の成り立ちを、確実な範囲でたどります。`}
+    />
+    <div class="grid gap-6 md:grid-cols-3">
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">大正期</p>
+        <h3 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">飴と駄菓子の職人が集まる</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          大正期、東京方面から菓子の職人や菓子問屋が川越へ移り住み、飴・あられ・駄菓子づくりを始めたことが、横丁のはじまりとして伝えられています。川越は江戸以来の蔵造りの町並みが残る商業の町で、菓子づくりを支える環境がありました。
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">関東大震災後</p>
+        <h3 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">移住と駄菓子文化</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          1923年の関東大震災を機に、被害の大きかった東京から職人が移り住んだことが、駄菓子店の集積を後押ししたとされます。学校帰りの子どもが立ち寄る駄菓子屋の光景は、昭和の時期までこの路地の日常でした。
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">現在</p>
+        <h3 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">約30軒ほどの店が並ぶ</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          現在は約30軒程度の菓子店が石畳の細い路地に並びます。店ごとに営業時間・定休日が異なるため、目当ての店がある場合は当日の掲示や公式情報での確認がおすすめです。
+        </p>
+      </article>
+    </div>
+    <p class="mt-6 text-xs leading-6 text-[var(--muted)]">
+      店舗数や由来は資料により幅があります。本ページは<a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.cityTourismUrl} target="_blank" rel="noopener noreferrer">川越市の観光ページ↗</a>および<a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.govtTourismUrl} target="_blank" rel="noopener noreferrer">{site.govtTourismName}↗</a>の公開情報をもとに、確実な範囲で要約しています。
+    </p>
+  </section>
+
+  <section class="bg-[rgba(63,40,27,.96)] py-20 text-[#fff8ea]">
+    <div class="container-page">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">FRAGRANT LANDSCAPE</p>
+      <h2 class="section-title mt-3 text-4xl font-black md:text-5xl">平成13年「かおり風景100選」</h2>
+      <div class="mt-8 grid gap-8 lg:grid-cols-[1.05fr_.95fr]">
+        <div class="text-sm leading-8 text-[#f6ddb4]">
+          <p>
+            2001年（平成13年）、当時の環境庁が選定した「かおり風景100選」に、この一帯の菓子の香りが選ばれました。醤油の焼ける香り、ニッキやハッカ飴の甘い匂い、昔ながらの菓子の香りが、その土地の記憶として評価されたものです。
+          </p>
+          <p class="mt-5">
+            「香り」で選ばれたことは、この路地の性格をよく表しています。<strong class="font-bold text-white">見た目の観光地ではなく、匂いと音、店の人の声で記憶される場所</strong>であるということです。訪れる側ができることは、その営みを邪魔しないことでもあります。
+          </p>
+          <p class="mt-5">
+            香りは時間帯や天候でも変わります。雨上がりの湿度が高い日は匂いが立ちやすく、平日の午前中は店先の作業を見学しやすい傾向があります。
+          </p>
+        </div>
+        <div class="rounded-[1.6rem] bg-white/8 p-6">
+          <h3 class="font-serif text-2xl font-bold">香りを楽しむための小さな配慮</h3>
+          <ul class="mt-4 grid gap-3 text-sm leading-7 text-[#f6ddb4]">
+            <li>• 店先で長時間立ち止まらず、撮影はひと言声をかけてから</li>
+            <li>• 香水や強い匂いのする飲食物は控えめに</li>
+            <li>• 食べ歩きの包みは持ち帰り、路地を汚さない</li>
+            <li>• 混雑時は譲り合い、通路を空ける</li>
+          </ul>
+          <div class="mt-6">
+            <SaveButton id="kashiya-yokocho" title={site.attractionName} category="メイン" note="香りの路地をゆっくり歩く。" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-20">
+    <SectionHeader
+      eyebrow="TOWN"
+      title={`${site.city}の町並みのなかの横丁`}
+      description={`${site.attractionName}は単体で成り立っているのではなく、蔵造りの町並み・時の鐘・川越氷川神社という、歩いて回れる範囲の資産と結びついています。`}
+    />
+    <div class="grid gap-4 md:grid-cols-2">
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">蔵造りの町並みと「小江戸」</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          川越は江戸時代から商業都市として栄え、明治期の大火の後に建てられた土蔵造りの商家がまとまって残ることから「小江戸」と呼ばれます。横丁はその蔵造りエリアの北側に接しており、町歩きの途中に立ち寄る位置にあります。
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">{site.nearbyLandmarks[0]}との距離</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          {site.nearbyLandmarks[0]}から横丁までは徒歩約4分。鐘の音を聞いた後に甘い香りの路地へ入る流れは、{site.city}でもっとも一般的な回り方のひとつです。
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">石畳と路地のスケール</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          路地は車がすれすれで通る幅で、石畳は凹凸があります。この「狭さ」が昭和的な雰囲気をつくると同時に、ベビーカーや車椅子では慎重な移動が必要になる理由でもあります。
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">祭りとの結びつき</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          10月の川越まつりの時期は、町全体が山車行事の会場となり、横丁周辺も大きく混み合います。行事そのものを目的に訪れる場合は、交通規制と時間帯の確認が必須です。
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="container-page pb-20">
+    <SectionHeader
+      eyebrow="MISCONCEPTIONS"
+      title="よくある誤解"
+      description="観光パンフレットの省略された表現から、誤って伝わりやすい点を整理します。"
+    />
+    <div class="grid gap-4 md:grid-cols-3">
+      <article class="rounded-[1.6rem] border border-[rgba(105,63,40,.18)] bg-white/70 p-6">
+        <p class="text-sm font-bold text-[var(--red)]">Q. 江戸時代から続く横丁？</p>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          町そのものは江戸以来の商業地ですが、菓子店が集まる横丁としてのルーツは大正期以降と伝えられています。「古い町並みのなかの、比較的新しい菓子の路地」と捉えるのが正確です。
+        </p>
+      </article>
+      <article class="rounded-[1.6rem] border border-[rgba(105,63,40,.18)] bg-white/70 p-6">
+        <p class="text-sm font-bold text-[var(--red)]">Q. 全店が同じ時間に開く？</p>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          いいえ。営業時間も定休日も店ごとに異なります。横丁全体としての統一された開閉時間はありません。
+        </p>
+      </article>
+      <article class="rounded-[1.6rem] border border-[rgba(105,63,40,.18)] bg-white/70 p-6">
+        <p class="text-sm font-bold text-[var(--red)]">Q. 入場には料金がいる？</p>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          歩くこと自体は無料です。買い物や飲食、体験にお金がかかる形で、入場券のようなものはありません。
+        </p>
+      </article>
+    </div>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="/" class="btn-secondary">概要に戻る</a>
+      <a href="/nearby/" class="btn-secondary">周辺スポットを見る</a>
+      <a href="/methodology/" class="btn-secondary">データの集め方を見る</a>
+    </div>
+  </section>
+
+  <section class="container-page pb-20">
+    <GoogleRating />
+  </section>
+
+  <SourcesSection
+    title="歴史情報の出典"
+    description="歴史・選定・店舗数は公的機関と観光協会の公開情報をもとに要約しています。解釈を避け、確実な範囲のみを記載しています。"
+  />
+</Layout>

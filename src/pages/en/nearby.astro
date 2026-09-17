@@ -1,0 +1,58 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import SpotCard from '@components/SpotCard.astro';
+import { siteText } from '@i18n/site';
+import { buildStructuredDataEn, nearbySpots } from '@data/content.en';
+
+const lang = 'en' as const;
+const st = siteText(lang);
+const title = `Nearby spots | ${st.attractionName}`;
+const description = 'Toki no Kane bell tower, the kurazukuri warehouse district, the Kawagoe festival museum, Kawagoe Hikawa Shrine, Taisho Roman Yume Dori and Kitain — all walkable from Kashiya Yokocho.';
+const structuredData = buildStructuredDataEn('/en/nearby/', title, description, [
+  { name: 'Home', path: '/en/' },
+  { name: st.attractionName },
+  { name: 'Nearby spots' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData} lang={lang}>
+  <PageHero
+    compact
+    eyebrow="AROUND"
+    title="Draw Little Edo Kawagoe in one line from Kashiya Yokocho."
+    description="The nearby spots sit within walking distance. For a short visit, do the bell tower and the warehouse streets; with half a day, continue to Kawagoe Hikawa Shrine or Kitain and the sweet lane connects with the historic townscape."
+    image="/images/kashiya-noren.webp"
+    lang={lang}
+  />
+
+  <section class="container-page pb-16">
+    <SectionHeader eyebrow="SPOTS" title="Nearby spot list" description="Times are walking estimates. Crowds, traffic lights and photo stops all add time, so build in slack." />
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {nearbySpots.map((item) => <SpotCard item={item} lang={lang} />)}
+    </div>
+  </section>
+
+  <section class="container-page pb-20">
+    <div class="wood-card rounded-[2rem] p-8 md:p-10">
+      <div class="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">ROUTE</p>
+          <h2 class="section-title mt-3 text-4xl font-black">If in doubt, go in this order.</h2>
+          <p class="mt-5 text-sm leading-8 text-[#f6ddb4]">Coming from Hon-Kawagoe Station: warehouse district → Toki no Kane → Kashiya Yokocho → Kawagoe festival museum, then on to Kawagoe Hikawa Shrine if you have time.</p>
+        </div>
+        <ol class="grid gap-4 md:grid-cols-2">
+          {[
+            'Look at the townhouse facades in the warehouse district',
+            'Take the classic Kawagoe photo at Toki no Kane',
+            'Choose candy, crackers and sweet-potato sweets in the lane',
+            'Finish at the festival museum or Hikawa Shrine',
+          ].map((step, index) => (
+            <li class="rounded-3xl border border-white/12 bg-white/8 p-5 text-sm leading-7 text-[#f6ddb4]"><span class="mr-2 text-lg font-black text-[#f6c96b]">{index + 1}</span>{step}</li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+</Layout>

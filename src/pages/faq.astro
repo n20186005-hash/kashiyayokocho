@@ -2,11 +2,18 @@
 import Layout from '@layouts/Layout.astro';
 import PageHero from '@components/PageHero.astro';
 import SectionHeader from '@components/SectionHeader.astro';
+import { site } from '@config/site';
 import { faq, buildStructuredData } from '@data/content';
 
-const title = 'FAQ・よくある質問';
+const title = `FAQ・よくある質問｜${site.attractionName}（${site.city}）`;
 const description = '菓子屋横丁の入場料、営業時間、滞在時間、雨の日、駐車場、子ども連れ、支払い、ローカル保存機能についてまとめたFAQです。';
-const structuredData = buildStructuredData('/faq/', title, description);
+const structuredData = buildStructuredData('/faq/', title, description, [
+  { name: 'ホーム', path: '/' },
+  { name: site.region },
+  { name: site.city },
+  { name: site.attractionName },
+  { name: 'FAQ' },
+]);
 ---
 <Layout title={title} description={description} structuredData={structuredData}>
   <PageHero

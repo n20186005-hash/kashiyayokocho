@@ -1,13 +1,18 @@
 ---
 import { site } from '@config/site';
-import { googleRating } from '@data/content';
+import { googleRating as ratingJa } from '@data/content';
+import { googleRating as ratingEn } from '@data/content.en';
+import { t, type Lang } from '@i18n/index';
 
 interface Props {
   tone?: 'light' | 'wood';
   compact?: boolean;
+  lang?: Lang;
 }
-const { tone = 'light', compact = false } = Astro.props;
+const { tone = 'light', compact = false, lang = 'ja' } = Astro.props;
 const wood = tone === 'wood';
+const dict = t(lang).rating;
+const googleRating = lang === 'en' ? ratingEn : ratingJa;
 const percent = (googleRating.value / googleRating.best) * 100;
 ---
 
@@ -19,13 +24,13 @@ const percent = (googleRating.value / googleRating.best) * 100;
   aria-labelledby="google-rating-title"
 >
   <p class:list={['text-xs font-black uppercase tracking-[.22em]', wood ? 'text-[#f6c96b]' : 'text-[var(--red)]']}>
-    USER RATING
+    {dict.eyebrow}
   </p>
   <h2
     id="google-rating-title"
     class:list={['mt-2 font-serif font-bold tracking-[.04em]', compact ? 'text-2xl' : 'text-3xl md:text-4xl', wood ? 'text-[#fff8ea]' : 'text-[var(--wood)]']}
   >
-    Google マップの評価
+    {dict.title}
   </h2>
 
   <div class="mt-5 flex flex-wrap items-end gap-x-5 gap-y-3">
@@ -42,20 +47,20 @@ const percent = (googleRating.value / googleRating.best) * 100;
         >★★★★★</span>
       </div>
       <p class:list={['mt-2 text-sm font-bold', wood ? 'text-[#f6ddb4]' : 'text-[var(--wood)]']}>
-        {googleRating.countLabel}件のユーザー評価
+        {googleRating.countLabel}{lang === 'en' ? ' ' : '件の'}{dict.reviewsSuffix}
       </p>
     </div>
   </div>
 
   <p class:list={['mt-4 text-xs leading-6', wood ? 'text-[#f6ddb4]' : 'text-[var(--muted)]']}>
-    評価と評価件数は Google マップ（Google Maps）のユーザー評価を同期 · {googleRating.syncedAt} ·
+    {dict.syncPrefix} · {googleRating.syncedAt} ·
     <a
       class="font-bold underline decoration-dotted underline-offset-4"
       href={googleRating.sourceUrl}
       target="_blank"
       rel="noopener noreferrer"
     >
-      すべての評価を Google マップで見る↗
+      {dict.viewAll}↗
     </a>
   </p>
 
@@ -70,7 +75,7 @@ const percent = (googleRating.value / googleRating.best) * 100;
       target="_blank"
       rel="noopener noreferrer"
     >
-      Google マップで全部の評価を見る
+      {dict.viewAllShort}
     </a>
     <a
       class={wood ? 'btn-secondary border-white/30 bg-white/10 !text-[#fff8ea]' : 'btn-secondary'}
@@ -78,7 +83,7 @@ const percent = (googleRating.value / googleRating.best) * 100;
       target="_blank"
       rel="noopener noreferrer"
     >
-      公式サイトを開く
+      {dict.official}
     </a>
   </div>
 </section>

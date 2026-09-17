@@ -1,24 +1,39 @@
 ---
-import { navItems, site } from '@config/site';
+import { siteText } from '@i18n/site';
+import { getLangFromPath, navItems, t, type Lang } from '@i18n/index';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang } = Astro.props;
+const current: Lang = lang ?? getLangFromPath(Astro.url.pathname);
+const dict = t(current);
+const st = siteText(current);
+const items = navItems[current];
+const privacyHref = current === 'en' ? '/en/privacy/' : '/privacy/';
+const creditsHref = current === 'en' ? '/en/credits/' : '/credits/';
+const methodHref = current === 'en' ? '/en/methodology/' : '/methodology/';
 ---
+
 <footer class="mt-24 border-t border-[rgba(105,63,40,.16)] bg-[rgba(63,40,27,.96)] text-[#fff8ea]">
   <div class="container-page grid gap-10 py-12 lg:grid-cols-[1.2fr_.8fr_.8fr]">
     <div>
-      <p class="font-serif text-2xl font-bold tracking-[.08em]">{site.name}</p>
-      <p class="mt-3 max-w-xl text-sm leading-7 text-[#f2dfbd]">小江戸川越の甘い香り、石畳、町家の店先をゆっくり楽しむための旅行者向けガイドです。旅のリストと記念カードは端末内だけで動きます。</p>
-      <p class="mt-5 rounded-2xl border border-[#f8ead0]/16 bg-white/5 p-4 text-xs leading-6 text-[#f2dfbd]">本サイトは菓子屋横丁および各店舗・自治体の公式サイトではありません。旅行者向けに公開情報を整理した非公式ガイドです。</p>
+      <p class="font-serif text-2xl font-bold tracking-[.08em]">{st.name}</p>
+      <p class="mt-3 max-w-xl text-sm leading-7 text-[#f2dfbd]">{dict.footer.description}</p>
+      <p class="mt-5 rounded-2xl border border-[#f8ead0]/16 bg-white/5 p-4 text-xs leading-6 text-[#f2dfbd]">{dict.footer.notice}</p>
     </div>
     <div>
-      <p class="font-bold">ページ</p>
+      <p class="font-bold">{dict.footer.pages}</p>
       <div class="mt-4 grid gap-2 text-sm text-[#f2dfbd]">
-        {navItems.map((item) => <a class="hover:text-white" href={item.href}>{item.label}</a>)}
+        {items.map((item) => <a class="hover:text-white" href={item.href}>{item.label}</a>)}
       </div>
     </div>
     <div>
-      <p class="font-bold">サイト情報</p>
+      <p class="font-bold">{dict.footer.siteInfo}</p>
       <div class="mt-4 grid gap-2 text-sm text-[#f2dfbd]">
-        <a class="hover:text-white" href="/privacy/">プライバシー</a>
-        <a class="hover:text-white" href="/credits/">写真・情報ソース</a>
+        <a class="hover:text-white" href={privacyHref}>{dict.footer.privacy}</a>
+        <a class="hover:text-white" href={creditsHref}>{dict.footer.credits}</a>
+        <a class="hover:text-white" href={methodHref}>{dict.footer.methodology}</a>
       </div>
     </div>
   </div>

@@ -1,0 +1,145 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import { site } from '@config/site';
+import { siteText } from '@i18n/site';
+import { buildStructuredDataEn, googleRating } from '@data/content.en';
+
+const lang = 'en' as const;
+const st = siteText(lang);
+const title = `Data & method | ${st.attractionName}`;
+const description = 'A transparency page showing where this guide gets ratings, hours, weather and nearby information, how it is verified and updated, and how the on-device features (trip list, memory card) are handled.';
+const structuredData = buildStructuredDataEn('/en/methodology/', title, description, [
+  { name: 'Home', path: '/en/' },
+  { name: st.region },
+  { name: st.city },
+  { name: st.attractionName },
+  { name: 'Data & method' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData} lang={lang}>
+  <PageHero
+    eyebrow="METHODOLOGY"
+    title="How we collect data and update it"
+    description="This is an unofficial traveller guide. This page states what we base information on, and what we do not guarantee."
+    image="/images/kashiya-street.webp"
+    imageAlt="Townscape and stone-paved street in Kawagoe"
+    compact
+    lang={lang}
+  />
+
+  <section class="container-page pb-16">
+    <SectionHeader
+      eyebrow="SOURCES"
+      title="Sources we use"
+      description="We prioritise primary sources (authorities and official sites); ratings and crowding tendencies are quoted from collective user data with attribution."
+    />
+    <div class="overflow-hidden rounded-[1.8rem] border border-[rgba(105,63,40,.18)] bg-white/70">
+      <table class="w-full border-collapse text-left text-sm">
+        <thead class="bg-[rgba(201,78,54,.1)] text-[var(--wood)]">
+          <tr>
+            <th class="px-4 py-3 font-bold">Item</th>
+            <th class="px-4 py-3 font-bold">Source</th>
+            <th class="px-4 py-3 font-bold">How we treat it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="align-top bg-white/70">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">User rating</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.mapsShareUrl} target="_blank" rel="noopener noreferrer">Google Maps↗</a>
+            </td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              {googleRating.value} / 5 ({googleRating.countLabel} ratings), quoted as of {googleRating.syncedAt}. Ratings change constantly, so check the source for the latest value. Copyright belongs to the individual contributors and Google Maps.
+            </td>
+          </tr>
+          <tr class="align-top bg-white/40">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">Location, coordinates, history</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.cityTourismUrl} target="_blank" rel="noopener noreferrer">Kawagoe City↗</a>
+            </td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">Summarised from public authority information, only where well supported. No interpretation or speculation is added.</td>
+          </tr>
+          <tr class="align-top bg-white/70">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">Nearby spots and walking routes</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.govtTourismUrl} target="_blank" rel="noopener noreferrer">{st.govtTourismName}↗</a>
+            </td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">Walking minutes are estimates and exclude waiting at lights, crowding and photo stops.</td>
+          </tr>
+          <tr class="align-top bg-white/40">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">Weather and how to spend it</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">Open-Meteo (weather forecast API)</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">
+              Current local conditions and the next seven days are fetched, and advice is generated automatically from the conditions. It is a forecast — do a final check with a primary source such as the Japan Meteorological Agency before going out.
+            </td>
+          </tr>
+          <tr class="align-top bg-white/70">
+            <td class="px-4 py-4 font-bold text-[var(--wood)]">Hours and closing days</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">Each shop’s notices and official information</td>
+            <td class="px-4 py-4 leading-7 text-[var(--muted)]">Because they differ by shop, this site shows them only as a rough guide.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="container-page pb-20">
+    <SectionHeader
+      eyebrow="PRIVACY BY DESIGN"
+      title="Features that run on your device"
+      description="The trip list and the memory card are built so that nothing is sent to a server."
+    />
+    <div class="grid gap-4 md:grid-cols-3">
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-3xl">🧺</p>
+        <h3 class="mt-3 font-serif text-xl font-bold text-[var(--wood)]">Trip list</h3>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          Spots you add are stored in your browser’s localStorage. There is no syncing across devices and nothing is sent to a server. Clearing browser data clears the list too.
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-3xl">🎴</p>
+        <h3 class="mt-3 font-serif text-xl font-bold text-[var(--wood)]">Memory card</h3>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          Compositing your chosen photo with a frame happens on a Canvas in your browser. Images are never uploaded or stored externally.
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-3xl">📊</p>
+        <h3 class="mt-3 font-serif text-xl font-bold text-[var(--wood)]">Analytics</h3>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          Google Analytics 4 (GA4) is used for statistics such as page views. See the <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href="/privacy/">privacy page</a> for details.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="bg-[rgba(63,40,27,.96)] py-20 text-[#fff8ea]">
+    <div class="container-page grid gap-10 lg:grid-cols-2">
+      <div>
+        <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">UPDATE POLICY</p>
+        <h2 class="section-title mt-3 text-4xl font-black">Updates and limits</h2>
+        <ul class="mt-6 grid gap-3 text-sm leading-8 text-[#f6ddb4]">
+          <li>• User ratings are re-synced periodically, but are not always the latest value.</li>
+          <li>• Hours, prices and event dates change — always confirm with a primary source before visiting.</li>
+          <li>• Walking times and suggested durations are estimates and vary with actual crowding.</li>
+          <li>• We do not rank shops or judge them against each other, and do not recommend specific businesses.</li>
+        </ul>
+      </div>
+      <div class="rounded-[1.6rem] bg-white/8 p-6">
+        <h3 class="font-serif text-2xl font-bold">Being an unofficial guide</h3>
+        <p class="mt-4 text-sm leading-8 text-[#f6ddb4]">
+          This site is not the official site of {st.attractionName}, its shops, or the local authorities. It uses public information to help travellers decide. Accuracy depends on the sources cited and is not guaranteed by this site.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a class="btn-secondary border-white/30 bg-white/10 !text-[#fff8ea]" href={site.officialUrl} target="_blank" rel="noopener noreferrer">Official site↗</a>
+          <a class="btn-secondary border-white/30 bg-white/10 !text-[#fff8ea]" href="/en/credits/">Photo &amp; sources</a>
+          <a class="btn-secondary border-white/30 bg-white/10 !text-[#fff8ea]" href="/privacy/">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

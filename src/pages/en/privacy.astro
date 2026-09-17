@@ -1,0 +1,49 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import { buildStructuredDataEn } from '@data/content.en';
+
+const lang = 'en' as const;
+const title = 'Privacy | Kashiya Yokocho Stroll Notes';
+const description = 'Privacy policy: the trip list and the memory card are processed inside your browser, and neither photos nor notes are sent to a server.';
+const structuredData = buildStructuredDataEn('/en/privacy/', title, description, [
+  { name: 'Home', path: '/en/' },
+  { name: 'Privacy' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData} lang={lang}>
+  <PageHero
+    eyebrow="Privacy"
+    title="Your photos and trip notes stay on this device."
+    description="This site uses no database, no login and no CMS. The trip list uses localStorage and the memory card is composited on a Canvas."
+    image="/images/kashiya-noren.webp"
+    lang={lang}
+  />
+
+  <section class="container-page py-14">
+    <SectionHeader
+      eyebrow="Local First"
+      title="How this site handles data"
+      description="We state how storage works so you can use the site with confidence before and during your trip."
+    />
+    <div class="mt-8 grid gap-5 md:grid-cols-3">
+      <article class="paper-card rounded-[1.6rem] p-6">
+        <p class="text-sm font-bold tracking-[.2em] text-[#b94732]">TRIP LIST</p>
+        <h2 class="mt-3 font-serif text-2xl font-bold">localStorage</h2>
+        <p class="mt-3 leading-8 text-[#7c6757]">Saved spots remain only in your current browser. There is no syncing to other devices and no server-side storage.</p>
+      </article>
+      <article class="paper-card rounded-[1.6rem] p-6">
+        <p class="text-sm font-bold tracking-[.2em] text-[#b94732]">MEMORY CARD</p>
+        <h2 class="mt-3 font-serif text-2xl font-bold">Canvas compositing</h2>
+        <p class="mt-3 leading-8 text-[#7c6757]">Photos chosen from camera, selfie or album are drawn in the browser and are never uploaded.</p>
+      </article>
+      <article class="paper-card rounded-[1.6rem] p-6">
+        <p class="text-sm font-bold tracking-[.2em] text-[#b94732]">ANALYTICS</p>
+        <h2 class="mt-3 font-serif text-2xl font-bold">GA4</h2>
+        <p class="mt-3 leading-8 text-[#7c6757]">Google Analytics 4 is used to understand browsing trends. The contents of your personal notes and photos are not sent.</p>
+      </article>
+    </div>
+  </section>
+</Layout>

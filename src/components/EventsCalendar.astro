@@ -1,0 +1,40 @@
+---
+import SectionHeader from '@components/SectionHeader.astro';
+import { events as eventsJa } from '@data/content';
+import { events as eventsEn } from '@data/content.en';
+import { t, type Lang } from '@i18n/index';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'ja' } = Astro.props;
+const dict = t(lang).events;
+const events = lang === 'en' ? eventsEn : eventsJa;
+---
+
+<section class="container-page pb-20">
+  <SectionHeader eyebrow={dict.eyebrow} title={dict.title} description={dict.description} />
+  <div class="overflow-hidden rounded-[1.8rem] border border-[rgba(105,63,40,.18)] bg-white/70">
+    <table class="w-full border-collapse text-left text-sm">
+      <thead class="bg-[rgba(201,78,54,.1)] text-[var(--wood)]">
+        <tr>
+          <th class="px-4 py-3 font-bold">{dict.th.name}</th>
+          <th class="px-4 py-3 font-bold">{dict.th.period}</th>
+          <th class="px-4 py-3 font-bold">{dict.th.note}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          events.map((e, i) => (
+            <tr class:list={['align-top', i % 2 ? 'bg-white/40' : 'bg-white/70']}>
+              <td class="px-4 py-4 font-bold text-[var(--wood)]">{e.name}</td>
+              <td class="px-4 py-4 leading-7 text-[var(--muted)]">{e.period}</td>
+              <td class="px-4 py-4 leading-7 text-[var(--muted)]">{e.note}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="mt-4 text-xs leading-6 text-[var(--muted)]">{dict.verify}</p>
+</section>

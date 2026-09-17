@@ -1,0 +1,81 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import SourcesSection from '@components/SourcesSection.astro';
+import { site } from '@config/site';
+import { siteText } from '@i18n/site';
+import { buildStructuredDataEn, googleRating, sources } from '@data/content.en';
+import { photoCredits } from '@data/content';
+
+const lang = 'en' as const;
+const st = siteText(lang);
+const title = 'Photo & information credits';
+const description = `The photos and reference sources used by Kashiya Yokocho Stroll Notes, including the source of the Google Maps user rating (${googleRating.value}/5, ${googleRating.countLabel} ratings, synced ${googleRating.syncedAt}).`;
+const structuredData = buildStructuredDataEn('/en/credits/', title, description, [
+  { name: 'Home', path: '/en/' },
+  { name: 'Photo & information credits' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData} lang={lang}>
+  <PageHero
+    eyebrow="Credits"
+    title="Photo and information sources"
+    description="Photos are stored locally on this site and credited on this page. The rating is synced from Google Maps user ratings."
+    image="/images/kashiya-busy.webp"
+    imageAlt={`Busy lane of ${st.attractionName}, ${st.city}`}
+    lang={lang}
+  />
+
+  <section class="container-page py-14">
+    <SectionHeader eyebrow="Rating" title="Source of the rating" description="Where the rating score and review count shown at the top of pages come from." />
+    <div class="mt-8 rounded-[1.6rem] border border-[rgba(105,63,40,.18)] bg-white/72 p-6">
+      <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">Google Maps</p>
+      <h2 class="mt-2 font-serif text-2xl font-bold text-[var(--wood)]">
+        {googleRating.value} / {googleRating.best} ({googleRating.countLabel} ratings) · synced {googleRating.syncedAt}
+      </h2>
+      <p class="mt-3 text-sm leading-7 text-[var(--muted)]">{googleRating.note}</p>
+      <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+        Individual review texts are not reproduced on this site; you can read them on Google Maps. Ratings change from day to day.
+      </p>
+      <a
+        class="mt-4 inline-flex text-sm font-bold text-[var(--red)] underline decoration-dotted underline-offset-4"
+        href={googleRating.sourceUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        See all ratings on Google Maps↗
+      </a>
+    </div>
+  </section>
+
+  <section class="container-page pb-14">
+    <SectionHeader eyebrow="Photos" title="Photo credits" description="Images published on Wikimedia Commons are stored on this site and converted to WebP." />
+    <div class="mt-8 grid gap-4 md:grid-cols-2">
+      {photoCredits.map((item) => (
+        <article class="paper-card rounded-[1.4rem] p-5">
+          <p class="text-xs font-bold tracking-[.2em] text-[#b94732]">{item.file}</p>
+          <h2 class="mt-2 font-serif text-xl font-bold">{item.title}</h2>
+          <p class="mt-2 text-sm leading-7 text-[#7c6757]">Author: {item.author} / Licence: {item.license}</p>
+          <a class="mt-3 inline-flex text-sm font-bold text-[#b94732] underline decoration-dotted underline-offset-4" href={item.source} target="_blank" rel="noreferrer">Check the source</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page pb-8">
+    <SectionHeader eyebrow="Information" title="Reference sources" description="Main references checked when building these pages." />
+    <div class="mt-8 grid gap-4 md:grid-cols-2">
+      {sources.map((item) => (
+        <article class="paper-card rounded-[1.4rem] p-5">
+          <h2 class="font-serif text-xl font-bold">{item.title}</h2>
+          <p class="mt-2 text-sm leading-7 text-[#7c6757]">{item.memo}</p>
+          <a class="mt-3 inline-flex text-sm font-bold text-[#b94732] underline decoration-dotted underline-offset-4" href={item.url} target="_blank" rel="noreferrer">Open the source</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <SourcesSection title="Sources" description={`A list of the sources for the rating, location, history and surroundings of ${st.attractionName}.`} lang={lang} />
+</Layout>

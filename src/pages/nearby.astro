@@ -3,12 +3,19 @@ import Layout from '@layouts/Layout.astro';
 import PageHero from '@components/PageHero.astro';
 import SectionHeader from '@components/SectionHeader.astro';
 import SpotCard from '@components/SpotCard.astro';
+import { site } from '@config/site';
 import { buildStructuredData, nearbySpots } from '@data/content';
 
-const title = '周辺スポット';
+const title = `周辺スポット｜${site.attractionName}（${site.city}）`;
 const description = '菓子屋横丁と一緒に歩きたい時の鐘、蔵造りの町並み、川越まつり会館、川越氷川神社、大正浪漫夢通り、喜多院を紹介します。';
 ---
-<Layout title={title} description={description} structuredData={buildStructuredData('/nearby/', title, description)}>
+<Layout title={title} description={description} structuredData={buildStructuredData('/nearby/', title, description, [
+    { name: 'ホーム', path: '/' },
+    { name: site.region },
+    { name: site.city },
+    { name: site.attractionName },
+    { name: '周辺スポット' },
+  ])}>
   <PageHero
     compact
     eyebrow="AROUND"

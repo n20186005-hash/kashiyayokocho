@@ -1,0 +1,178 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PageHero from '@components/PageHero.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+import GoogleRating from '@components/GoogleRating.astro';
+import SourcesSection from '@components/SourcesSection.astro';
+import SaveButton from '@components/SaveButton.astro';
+import { site } from '@config/site';
+import { siteText } from '@i18n/site';
+import { buildStructuredDataEn } from '@data/content.en';
+
+const lang = 'en' as const;
+const st = siteText(lang);
+const title = `History & background | ${st.attractionName} (${st.city})`;
+const description = `How ${st.attractionName} in ${st.city} came to be: confectioners arriving in the Taisho era, dagashi making after the Great Kanto Earthquake, the 2001 “100 Fragrant Landscapes” selection, and the stone-paved lane today.`;
+const structuredData = buildStructuredDataEn('/en/about/', title, description, [
+  { name: 'Home', path: '/en/' },
+  { name: st.region },
+  { name: st.city },
+  { name: st.attractionName },
+  { name: 'History' },
+]);
+---
+
+<Layout title={title} description={description} structuredData={structuredData} lang={lang}>
+  <PageHero
+    eyebrow="HISTORY"
+    title={`The history and background of ${st.attractionName}`}
+    description="Why a stone-paved lane that smells of sweets came to exist in Kawagoe — from the arrival of confectioners in the Taisho era through the “100 Fragrant Landscapes” selection to the lane today."
+    image="/images/kashiya-noren.webp"
+    imageAlt="Shop curtains and shelves of dagashi in Kashiya Yokocho"
+    compact
+    lang={lang}
+  />
+
+  <section class="container-page pb-16">
+    <SectionHeader
+      eyebrow="ORIGIN"
+      title="Origins: a lane where confectioners gathered in the Taisho era"
+      description="The roots of the lane are generally traced to the Taisho era rather than the Edo period. What follows stays within what is documented."
+    />
+    <div class="grid gap-6 md:grid-cols-3">
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">TAISHO ERA</p>
+        <h3 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">Candy and dagashi makers gather</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          In the Taisho era, confectioners and sweet wholesalers moved to Kawagoe from the Tokyo area and began making candy, arare and dagashi — this is the origin most often given for the lane. Kawagoe was a commercial town that still had Edo-period warehouse architecture, and had the environment to support confectionery making.
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">AFTER 1923</p>
+        <h3 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">Migration and dagashi culture</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          The Great Kanto Earthquake of 1923 is said to have pushed more craftspeople to move here from the badly damaged Tokyo area, encouraging the cluster of dagashi shops. Children stopping at dagashi shops on the way home from school was everyday life in this lane well into the Showa era.
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <p class="text-xs font-black uppercase tracking-[.2em] text-[var(--red)]">TODAY</p>
+        <h3 class="mt-3 font-serif text-2xl font-bold text-[var(--wood)]">Around thirty shops</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          Around thirty confectioners now line the narrow stone-paved lane. Hours and closing days differ by shop, so check notices or official information on the day if you have somewhere specific in mind.
+        </p>
+      </article>
+    </div>
+    <p class="mt-6 text-xs leading-6 text-[var(--muted)]">
+      Shop counts and origins vary between sources. This page summarises only what is supported by <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.cityTourismUrl} target="_blank" rel="noopener noreferrer">Kawagoe City↗</a> and <a class="font-bold text-[var(--red)] underline decoration-dotted underline-offset-4" href={site.govtTourismUrl} target="_blank" rel="noopener noreferrer">{st.govtTourismName}↗</a>.
+    </p>
+  </section>
+
+  <section class="bg-[rgba(63,40,27,.96)] py-20 text-[#fff8ea]">
+    <div class="container-page">
+      <p class="text-xs font-black uppercase tracking-[.22em] text-[#f6c96b]">FRAGRANT LANDSCAPE</p>
+      <h2 class="section-title mt-3 text-4xl font-black md:text-5xl">Selected among the 100 Fragrant Landscapes in 2001</h2>
+      <div class="mt-8 grid gap-8 lg:grid-cols-[1.05fr_.95fr]">
+        <div class="text-sm leading-8 text-[#f6ddb4]">
+          <p>
+            In 2001, the scent of sweets in this area was chosen for the “100 Fragrant Landscapes” selection by the then Environment Agency. The smell of scorched soy sauce, the sweet scent of cinnamon and mint candy, and the smell of old-fashioned confectionery were recognised as part of the memory of the place.
+          </p>
+          <p class="mt-5">
+            Being chosen for <strong class="font-bold text-white">smell</strong> says a lot about the character of this lane. It is not a sightseeing spot you only look at — it is a place remembered by scent, sound and the voices of the shopkeepers. What visitors can do is avoid getting in the way of that.
+          </p>
+          <p class="mt-5">
+            The scent changes with the time of day and the weather. Humid days just after rain carry it strongly, and on weekday mornings it is easier to watch the work at the shopfronts.
+          </p>
+        </div>
+        <div class="rounded-[1.6rem] bg-white/8 p-6">
+          <h3 class="font-serif text-2xl font-bold">Small courtesies for enjoying the scent</h3>
+          <ul class="mt-4 grid gap-3 text-sm leading-7 text-[#f6ddb4]">
+            <li>• Do not stand in front of a shop for long; ask before photographing</li>
+            <li>• Go easy on perfume and strongly scented food</li>
+            <li>• Take your wrappers with you and keep the lane clean</li>
+            <li>• Give way when it is crowded and keep the passage clear</li>
+          </ul>
+          <div class="mt-6">
+            <SaveButton id="kashiya-yokocho" title={st.attractionName} category="Main" note="Walk the scented lane slowly." lang={lang} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-20">
+    <SectionHeader
+      eyebrow="TOWN"
+      title="The lane within the townscape of Kawagoe"
+      description="The lane does not stand alone — it is tied to the warehouse district, the bell tower and Kawagoe Hikawa Shrine, all within walking range."
+    />
+    <div class="grid gap-4 md:grid-cols-2">
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">The warehouse district and “Little Edo”</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          Kawagoe prospered as a commercial city from the Edo period, and the clay-walled merchant houses built after the great Meiji-era fire survive as a group — which is why it is called “Little Edo”. The lane sits just north of that warehouse area, on the way through a town walk.
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">Distance to {st.nearbyLandmarks[0]}</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          It is about a 4-minute walk from {st.nearbyLandmarks[0]} to the lane. Hearing the bell and then stepping into the sweet-scented lane is one of the most common ways to see Kawagoe.
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">Stone paving and the scale of the lane</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          The lane is barely wide enough for a car to pass, and the paving is uneven. That narrowness creates the Showa-era atmosphere, and is also why pushchairs and wheelchairs need care.
+        </p>
+      </article>
+      <article class="paper-card rounded-[1.7rem] p-6">
+        <h3 class="font-serif text-2xl font-bold text-[var(--wood)]">Ties to the festival</h3>
+        <p class="mt-4 text-sm leading-7 text-[var(--muted)]">
+          During the Kawagoe festival in October the whole town becomes a float procession venue and the area around the lane gets very crowded. If the festival is your purpose, checking traffic restrictions and timing is essential.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="container-page pb-20">
+    <SectionHeader
+      eyebrow="MISCONCEPTIONS"
+      title="Common misconceptions"
+      description="Points that are easy to get wrong from the shortened wording of tourist pamphlets."
+    />
+    <div class="grid gap-4 md:grid-cols-3">
+      <article class="rounded-[1.6rem] border border-[rgba(105,63,40,.18)] bg-white/70 p-6">
+        <p class="text-sm font-bold text-[var(--red)]">Q. Does the lane date from the Edo period?</p>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          The town itself is a commercial district going back to the Edo period, but the lane as a cluster of sweet shops is generally traced to the Taisho era and later. “A relatively new confectionery lane inside an old townscape” is the accurate picture.
+        </p>
+      </article>
+      <article class="rounded-[1.6rem] border border-[rgba(105,63,40,.18)] bg-white/70 p-6">
+        <p class="text-sm font-bold text-[var(--red)]">Q. Do all shops open at the same time?</p>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          No. Hours and closing days differ by shop. There is no single set of opening hours for the lane as a whole.
+        </p>
+      </article>
+      <article class="rounded-[1.6rem] border border-[rgba(105,63,40,.18)] bg-white/70 p-6">
+        <p class="text-sm font-bold text-[var(--red)]">Q. Is there an admission fee?</p>
+        <p class="mt-3 text-sm leading-7 text-[var(--muted)]">
+          Walking is free. You pay for shopping, food and any experiences — there is no entrance ticket.
+        </p>
+      </article>
+    </div>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="/en/" class="btn-secondary">Back to overview</a>
+      <a href="/en/nearby/" class="btn-secondary">See nearby spots</a>
+      <a href="/en/methodology/" class="btn-secondary">See data &amp; method</a>
+    </div>
+  </section>
+
+  <section class="container-page pb-20">
+    <GoogleRating lang={lang} />
+  </section>
+
+  <SourcesSection
+    title="Sources for the history"
+    description="History, selection and shop counts are summarised from public information by authorities and the tourism association. No interpretation or speculation is added."
+    lang={lang}
+  />
+</Layout>

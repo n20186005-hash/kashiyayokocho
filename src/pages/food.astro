@@ -3,12 +3,19 @@ import Layout from '@layouts/Layout.astro';
 import PageHero from '@components/PageHero.astro';
 import SectionHeader from '@components/SectionHeader.astro';
 import SpotCard from '@components/SpotCard.astro';
+import { site } from '@config/site';
 import { buildStructuredData, foods } from '@data/content';
 
-const title = '周辺グルメ';
+const title = `周辺グルメ｜${site.attractionName}（${site.city}）`;
 const description = '菓子屋横丁と周辺で楽しみたい駄菓子、芋菓子、パン、ベーグル、うなぎ、和食の候補を旅行者目線でまとめました。';
 ---
-<Layout title={title} description={description} structuredData={buildStructuredData('/food/', title, description)}>
+<Layout title={title} description={description} structuredData={buildStructuredData('/food/', title, description, [
+    { name: 'ホーム', path: '/' },
+    { name: site.region },
+    { name: site.city },
+    { name: site.attractionName },
+    { name: '周辺グルメ' },
+  ])}>
   <PageHero
     compact
     eyebrow="FOOD"

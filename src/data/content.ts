@@ -1,4 +1,6 @@
 import { absoluteUrl, site } from '@config/site';
+import { localizedAddress, siteText } from '@i18n/site';
+import type { Lang } from '@i18n/index';
 
 export type TripItem = {
   id: string;
@@ -326,6 +328,232 @@ export const tripSeedItems: TripItem[] = [
   ...foods.slice(0, 4),
 ];
 
+/** 季節ごとの歩き方（SeasonalGuide） */
+export const seasons = [
+  {
+    name: '春',
+    months: '3〜5月',
+    climate: '桜の時期を中心に涼しく過ごしやすい。日中は15〜22℃程度が多く、朝晩は肌寒い日も。',
+    clothes: '軽い上着・羽織るもの。小雨対応の折りたたみ傘があると安心。',
+    crowd: '入学・行楽シーズンで休日は混みやすい。',
+    tip: '蔵造りエリアの散策とあわせ、昼前の早い時間に横丁を回すと写真が取りやすい。',
+  },
+  {
+    name: '夏',
+    months: '6〜8月',
+    climate: '梅雨から本格的な暑さへ。湿度が高く、日中は30℃超の日も多い。',
+    clothes: '通気性の良い服装・帽子・飲料。日差しが強い日は日焼け対策を。',
+    crowd: '祭りや花火の時期は特に混雑。夕方以降も人出が続く。',
+    tip: '涼しい店内型の甘味処をルートに入れ、こまめに水分補給。にわか雨に備えて雨具を。',
+  },
+  {
+    name: '秋',
+    months: '9〜11月',
+    climate: '過ごしやすい日が多く、観光に最も向く季節。晴れの日が多い傾向。',
+    clothes: '長袖＋軽い上着。朝晩の冷え込みに備えられると安心。',
+    crowd: '行楽シーズンで平日でもにぎわう。',
+    tip: '石畳と蔵の色合いが映えるため、写真と食べ歩きをゆっくり楽しむのに最適。',
+  },
+  {
+    name: '冬',
+    months: '12〜2月',
+    climate: '寒さが厳しく、晴れの日でも5℃以下になることがある。雪や路面凍結の日も。',
+    clothes: '防寒着・手袋・温かい靴。屋内で食べる甘味で体を温めるとよい。',
+    crowd: '年末年始・イルミネーション時期は混むが、平日は比較的静か。',
+    tip: 'あんこや芋菓子など温かいものを選び、短めの滞在で複数回に分けるのがおすすめ。',
+  },
+];
+
+/** 访客サービス（VisitorServices）：特定店舗名は挙げずタイプで中立案内 */
+export const services = [
+  {
+    icon: '🚻',
+    title: 'トイレ',
+    body: '横丁周辺と蔵造りエリアには公衆トイレがあります。観光案内所や大型の観光施設を併用すると、ベビー対応や身だしなみ対応が整っている傾向があります。',
+  },
+  {
+    icon: '🅿️',
+    title: '駐車場',
+    body: '横丁専用の大規模駐車場は限られます。市の観光用駐車場や駅・商店街近くのコインパーキングを前提に計画し、細い路地には車で入り込まず歩くのが基本です。',
+  },
+  {
+    icon: '🍡',
+    title: '飲食',
+    body: '甘味・軽食・和食・カフェなど、店舗ごとに営業時間と定休日が異なります。目当ての店がある場合は当日の掲示や公式情報で確認すると安心です。',
+  },
+  {
+    icon: '🏨',
+    title: '宿泊',
+    body: '川越市内には旅館・ビジネスホテル・ゲストハウスなど複数のタイプの宿泊施設があり、横丁から電車・バスで移動できる範囲に選びやすいです。',
+  },
+  {
+    icon: '🏪',
+    title: '買い物',
+    body: 'コンビニエンスストアやスーパーは駅周辺に多く、日中の補給や雨具の確保に便利です。横丁内は菓子・土産中心の店舗が中心です。',
+  },
+  {
+    icon: '⛽',
+    title: '給油・充電',
+    body: 'ガソリンスタンドは幹線道路沿いに点在します。電気自動車（EV）の充電は、駅近の商業施設や観光駐車場などの充電設備を出発前に確認するとよいでしょう。',
+  },
+  {
+    icon: '💴',
+    title: '現金・ATM',
+    body: '商店街では現金を扱う店が多く、小銭があると買い歩きしやすいです。近隣には銀行・コンビニのATMがあり、訪問前の現金確保に使えます。',
+  },
+  {
+    icon: '🍼',
+    title: '授乳・休憩',
+    body: '乳幼児連れには観光案内所などの休憩・授乳対応スペースが頼りになります。ベンチや屋根付きの休憩地点をルートに入れると疲れにくくなります。',
+  },
+];
+
+/** 対象別ルート（VisitorRoutes） */
+export const audienceRoutes = [
+  {
+    icon: '🧸',
+    title: '亲子家庭',
+    lead: '歩く距離を短く、甘いものと休憩を織り交ぜる。',
+    points: [
+      '本川越駅から蔵造りエリアを抜けて横丁へ（距離を抑えて段階的に）',
+      '飴・だんご・芋菓子を少しずつ買い歩き',
+      '公衆トイレ・ベンチのある休憩地点をルートに入れる',
+      '時間を決めて「今日の1品」を選ぶと買いすぎを防げる',
+    ],
+  },
+  {
+    icon: '📷',
+    title: '摄影・自然',
+    lead: '光の向きと人の薄い時間を狙って、石畳と蔵の質感を撮る。',
+    points: [
+      '平日の開店前後の静かな時間に横丁の路地を撮影',
+      '時の鐘・蔵造りの町並みを順光で回る',
+      '雨上がりの濡れた石畳は反射が映えて狙い目',
+      '食べ歩きの手元や店先の暖簾も画角のバリエーションに',
+    ],
+  },
+  {
+    icon: '♿',
+    title: '低体力・バリアフリー',
+    lead: '駅近の駐車場・バスを使い、無理なく休みながら回る。',
+    points: [
+      '川越駅からバスで「菓子屋横丁」停留所へ（徒歩を最小限に）',
+      'コインパーキング等から短い距離で入口へ',
+      '屋内型の甘味処・案内所を休憩拠点に',
+      '短時間で複数回に分ける立ち回りを想定',
+    ],
+  },
+];
+
+/** 標準ルート（VisitorRoutes） */
+export const standardRoutes = [
+  {
+    icon: '🌗',
+    title: '半日コース（約3時間）',
+    body: '菓子屋横丁で食べ歩き → 時の鐘で鐘の音と写真 → 蔵造りの町並み・一番街をぶらり。車なら観光用駐車場から往復。',
+  },
+  {
+    icon: '🌕',
+    title: '全日コース（約6時間）',
+    body: '午前に横丁と蔵造りエリア、昼は周辺の和食・うなぎ・カフェ、午後は川越氷川神社や博物館系スポットへ。小江戸の町並みをじっくり巡る。',
+  },
+];
+
+/** 訪問者の責任（VisitorResponsibility） */
+export const responsibilities = [
+  {
+    icon: '🗑️',
+    title: 'ゴミは持ち帰る',
+    body: '横丁は細い路地であり、多くの人が行き交います。食べ歩きの包みや容器は店舗・観光施設のごみ箱か、お持ち帰りで対応しましょう。',
+  },
+  {
+    icon: '🌸',
+    title: '香りと景観を守る',
+    body: '「かおり風景100選」に選ばれた路地の良さは、店の営みと来訪者のマナーで保たれます。店先や石畳の撮影は、通行を妨げないよう譲り合って。',
+  },
+  {
+    icon: '🚶',
+    title: '歩行のマナー',
+    body: '路地は車両と歩行者が近い距離で共有します。大きな荷物やベビーカーは人と人との間隔に配慮し、立ち止まる際は脇に寄りましょう。',
+  },
+  {
+    icon: '📖',
+    title: '背景を知る楽しみ',
+    body: `${site.attractionName}は大正期に菓子職人が集まった路地をルーツに持ちます。店ごとの歴史や「かおり風景」の背景を知ると、散策の味わいが深まります。`,
+  },
+];
+
+/**
+ * 季節の行事（EventsCalendar）。
+ * 年により日程が変わるため「目安時期」のみを掲載し、必ず公式情報での確認を促す。
+ */
+export const events = [
+  {
+    name: '川越まつり（川越氷川祭）',
+    period: '10月第3日曜 前後',
+    note: '最大級の混雑。山車行事は国の重要無形民俗文化財・ユネスコ無形文化遺産。交通規制あり。',
+  },
+  {
+    name: '川越氷川神社 風鈴まつり',
+    period: '7月上旬〜9月上旬 目安',
+    note: '江戸風鈴が並ぶ時期。夕方は境内と周辺がにぎわう。',
+  },
+  {
+    name: '川越百万灯夏まつり',
+    period: '7月下旬 目安',
+    note: '提灯とステージ行事が中心。夜間の人出が増える。',
+  },
+  {
+    name: '新河岸川の桜',
+    period: '3月下旬〜4月上旬 目安',
+    note: '開花時期は年により前後。週末は川越全体が混みやすい。',
+  },
+  {
+    name: '初詣（川越氷川神社 ほか）',
+    period: '1月1日〜3日 目安',
+    note: '三が日は周辺道路・バスが混雑。横丁は元日休の店も多い。',
+  },
+  {
+    name: '冬のイルミネーション',
+    period: '11月下旬〜12月 目安',
+    note: '夕方以降の滞在向き。冷え込み対策を。',
+  },
+];
+
+/** アクセシビリティ（Accessibility） */
+export const accessibility = [
+  {
+    icon: '🪨',
+    title: '石畳と段差',
+    body: '横丁は石畳の細い路地です。凹凸があるため、車椅子・ベビーカー・杖の方はゆっくり進み、混雑時間を避けると負担が減ります。',
+  },
+  {
+    icon: '🚏',
+    title: '徒歩距離を短くする',
+    body: '川越駅から路線バスで「菓子屋横丁」停留所へ向かうと徒歩距離を抑えられます。停留所のバリアフリー状況は事業者公式情報でご確認ください。',
+  },
+  {
+    icon: '🚻',
+    title: 'トイレ・休憩',
+    body: '公衆トイレに加え、観光案内所や大型観光施設の多目的トイレが頼りになります。ベンチと屋根付きの休憩地点をこまめに挟むと楽です。',
+  },
+  {
+    icon: '👶',
+    title: '乳幼児連れ',
+    body: '混雑時はベビーカーより抱っこ紐が動きやすい場合があります。授乳・おむつ替えは案内所や大型施設の利用が現実的です。',
+  },
+  {
+    icon: '🐕',
+    title: '補助犬・同伴',
+    body: '補助犬（盲導犬・介助犬・聴導犬）は公共空間への同伴が認められています。店舗内への入店は各店の判断に従いましょう。',
+  },
+  {
+    icon: '🆘',
+    title: '困ったとき',
+    body: '体調不良や迷子の际は、観光案内所か近隣の店舗に声をかけるのが最短です。緊急時は 119 / 110。',
+  },
+];
+
 export type BreadcrumbItem = { name: string; path?: string };
 
 export const buildStructuredData = (
@@ -333,16 +561,22 @@ export const buildStructuredData = (
   pageTitle?: string,
   pageDescription?: string,
   breadcrumb?: BreadcrumbItem[],
+  lang: Lang = 'ja',
+  faqItems: { q: string; a: string }[] = faq,
 ) => {
+  const st = siteText(lang);
+  const inLanguage = lang === 'en' ? 'en' : 'ja-JP';
   const url = site.url ? absoluteUrl(path) : undefined;
-  const images = site.url ? [absoluteUrl(site.ogImage), absoluteUrl(site.heroImage)] : undefined;
+  const heroUrl = site.url ? absoluteUrl(site.heroImage) : undefined;
+  const ogUrl = site.url ? absoluteUrl(site.ogImage) : undefined;
+  const images = site.url ? [ogUrl, heroUrl].filter(Boolean) : undefined;
   const websiteId = site.url ? `${site.url}/#website` : '#website';
   const attractionId = site.url ? `${site.url}/#attraction` : '#attraction';
   const localBusinessId = site.url ? `${site.url}/#local-business` : '#local-business';
   const faqId = site.url ? `${site.url}/faq/#faq` : '#faq';
   const webpageId = url ? `${url}#webpage` : '#webpage';
   const breadcrumbId = url ? `${url}#breadcrumb` : '#breadcrumb';
-  const faqEntities = faq.map((item) => ({
+  const faqEntities = faqItems.map((item) => ({
     '@type': 'Question',
     name: item.q,
     acceptedAnswer: {
@@ -351,14 +585,7 @@ export const buildStructuredData = (
     },
   }));
 
-  const postalAddress = {
-    '@type': 'PostalAddress',
-    streetAddress: site.address.street,
-    addressLocality: site.address.locality,
-    addressRegion: site.address.region,
-    postalCode: site.address.postalCode,
-    addressCountry: site.countryCode,
-  };
+  const postalAddress = localizedAddress(lang);
 
   const geoCoordinates = {
     '@type': 'GeoCoordinates',
@@ -366,15 +593,45 @@ export const buildStructuredData = (
     longitude: site.longitude,
   };
 
-  const attractionDescription = `${site.attractionName}は${site.region}${site.city}${site.address.street}にある、昔ながらの菓子屋が並ぶ石畳の横丁。${site.city}の蔵造りの町並み・${site.nearbyLandmarks[0]}とあわせて歩ける${site.region}の観光地です。`;
+  // 画像は ImageObject として意味づけし、出典はクレジットページを参照させる。
+  const imageObjects = heroUrl
+    ? [
+        {
+          '@type': 'ImageObject',
+          '@id': `${site.url}/#primary-image`,
+          url: heroUrl,
+          contentUrl: heroUrl,
+          caption:
+            lang === 'en'
+              ? 'Stone-paved lane and shopfronts of Kashiya Yokocho'
+              : '菓子屋横丁の石畳と店先の風景',
+          creditText:
+            lang === 'en'
+              ? 'Photo sources are listed on the credits page.'
+              : '写真の出典は「写真・情報ソース」ページに記載しています。',
+        },
+        ...(ogUrl ? [{ '@type': 'ImageObject', url: ogUrl, contentUrl: ogUrl }] : []),
+      ]
+    : undefined;
 
+  const attractionDescription =
+    lang === 'en'
+      ? `${st.attractionName} is a stone-paved lane of old-fashioned sweet shops in ${st.addressFull}. It is usually walked together with the ${st.nearbyLandmarks[0]} and the ${st.nearbyLandmarks[1]} of Little Edo ${site.city}.`
+      : `${site.attractionName}は${site.region}${site.city}${site.address.street}にある、昔ながらの菓子屋が並ぶ石畳の横丁。${site.city}の蔵造りの町並み・${site.nearbyLandmarks[0]}とあわせて歩ける${site.region}の観光地です。`;
+
+  // 営業時間は店舗ごとに異なるため、機械可読な固定値には補足説明を付ける。
   const openingHoursSpecification = {
     '@type': 'OpeningHoursSpecification',
     dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     opens: '10:00',
     closes: '17:00',
-    description: site.openingHoursText,
+    description: st.openingHoursText,
   };
+
+  // 自サイト自身を sameAs に含めると自己参照になるため除外する。
+  const sameAs = [site.mapsShareUrl, site.officialUrl, site.govtTourismUrl, site.cityTourismUrl].filter(
+    (candidate) => candidate && candidate.replace(/\/+$/, '') !== site.url.replace(/\/+$/, ''),
+  );
 
   return {
     '@context': 'https://schema.org',
@@ -382,45 +639,54 @@ export const buildStructuredData = (
       {
         '@type': 'WebSite',
         '@id': websiteId,
-        name: site.name,
+        name: st.name,
         ...(site.url ? { url: site.url } : {}),
-        inLanguage: 'ja-JP',
-        description: site.description,
+        inLanguage,
+        description: st.description,
       },
       {
         '@type': 'TouristAttraction',
         '@id': attractionId,
-        name: site.attractionName,
+        name: st.attractionName,
         alternateName: [
           site.attractionLatinName,
-          `${site.city} ${site.attractionName}`,
-          `${site.attractionName}（${site.city}）`,
+          `${st.city} ${st.attractionName}`,
+          lang === 'en' ? `${st.attractionName} (${st.city})` : `${st.attractionName}（${st.city}）`,
         ],
         description: attractionDescription,
-        ...(images ? { image: images } : {}),
+        ...(imageObjects ? { image: imageObjects } : { ...(images ? { image: images } : {}) }),
         ...(url ? { url } : {}),
         isAccessibleForFree: true,
         ...(site.url ? { hasMap: site.mapsShareUrl } : {}),
-        ...(site.url
-          ? { sameAs: [site.mapsShareUrl, site.officialUrl, site.govtTourismUrl, site.cityTourismUrl] }
-          : {}),
+        ...(site.url ? { sameAs } : {}),
         address: postalAddress,
         geo: geoCoordinates,
-        openingHours: site.openingHoursText,
+        openingHours: st.openingHoursText,
         openingHoursSpecification,
+        // ページ上に表示している評価値を構造化データにも反映（Google マップのユーザー評価を引用）。
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: site.ratingValue,
+          reviewCount: site.reviewCount,
+          bestRating: 5,
+          worstRating: 1,
+        },
       },
       {
         '@type': 'LocalBusiness',
         '@id': localBusinessId,
-        name: site.attractionName,
-        alternateName: [site.attractionLatinName, `${site.city} ${site.attractionName}`],
-        description: `${site.region}${site.city}の菓子屋・駄菓子店が集まる観光向け商店街。`,
-        ...(images ? { image: images } : {}),
+        name: st.attractionName,
+        alternateName: [site.attractionLatinName, `${st.city} ${st.attractionName}`],
+        description:
+          lang === 'en'
+            ? `A tourist shopping lane in ${site.city}, ${site.region}, lined with traditional confectionery and dagashi shops.`
+            : `${site.region}${site.city}の菓子屋・駄菓子店が集まる観光向け商店街。`,
+        ...(imageObjects ? { image: imageObjects } : { ...(images ? { image: images } : {}) }),
         telephone: site.phone,
-        priceRange: site.priceRange,
+        priceRange: st.priceRange,
         ...(url ? { url } : {}),
         ...(site.url ? { hasMap: site.mapsShareUrl } : {}),
-        ...(site.url ? { sameAs: [site.mapsShareUrl, site.officialUrl] } : {}),
+        ...(site.url ? { sameAs } : {}),
         address: postalAddress,
         geo: geoCoordinates,
         openingHours: site.openingHoursText,
@@ -449,12 +715,12 @@ export const buildStructuredData = (
         '@type': 'WebPage',
         '@id': webpageId,
         ...(url ? { url } : {}),
-        name: pageTitle ?? site.name,
-        description: pageDescription ?? site.description,
+        name: pageTitle ?? st.name,
+        description: pageDescription ?? st.description,
         isPartOf: { '@id': websiteId },
         about: { '@id': attractionId },
         ...(breadcrumb?.length ? { breadcrumb: { '@id': breadcrumbId } } : {}),
-        inLanguage: 'ja-JP',
+        inLanguage,
       },
     ],
   };

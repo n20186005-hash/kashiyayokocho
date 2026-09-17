@@ -51,7 +51,10 @@ const updateSaveButtons = () => {
     button.setAttribute('aria-pressed', saved ? 'true' : 'false');
     const label = button.querySelector<HTMLElement>('[data-save-label]');
     const icon = button.querySelector<HTMLElement>('[data-save-icon]');
-    if (label) label.textContent = saved ? '保存済み' : '旅リストに追加';
+    // 表示文言はボタン側の data 属性（言語別）から取得する。
+    const addLabel = button.dataset.labelAdd ?? '保存';
+    const savedLabel = button.dataset.labelSaved ?? '保存済み';
+    if (label) label.textContent = saved ? savedLabel : addLabel;
     if (icon) icon.textContent = saved ? '✓' : '+';
     button.classList.toggle('is-saved', saved);
   });

@@ -1,6 +1,16 @@
 ---
 import { site } from '@config/site';
+import { siteText } from '@i18n/site';
+import { t, type Lang } from '@i18n/index';
+
+interface Props {
+  lang?: Lang;
+}
+const { lang = 'ja' } = Astro.props;
+const st = siteText(lang);
+const title = `${st.attractionName} ${t(lang).common.mapTitle}`;
 ---
+
 <div class="map-frame paper-card rounded-[1.8rem] p-2">
   <iframe
     src={site.mapEmbedUrl}
@@ -10,6 +20,6 @@ import { site } from '@config/site';
     allowfullscreen
     loading="lazy"
     referrerpolicy="strict-origin-when-cross-origin"
-    title="菓子屋横丁 Google マップ"
+    title={title}
   ></iframe>
 </div>

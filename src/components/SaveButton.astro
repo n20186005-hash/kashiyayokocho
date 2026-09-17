@@ -1,4 +1,6 @@
 ---
+import { t, type Lang } from '@i18n/index';
+
 interface Props {
   id: string;
   title: string;
@@ -7,9 +9,12 @@ interface Props {
   time?: string | undefined;
   image?: string | undefined;
   compact?: boolean;
+  lang?: Lang;
 }
-const { id, title, category, note, time, image, compact = false } = Astro.props;
+const { id, title, category, note, time, image, compact = false, lang = 'ja' } = Astro.props;
+const labels = t(lang).save;
 ---
+
 <button
   type="button"
   class:list={[
@@ -22,7 +27,9 @@ const { id, title, category, note, time, image, compact = false } = Astro.props;
   data-note={note}
   data-time={time ?? ''}
   data-image={image ?? ''}
+  data-label-add={labels.add}
+  data-label-saved={labels.saved}
   aria-pressed="false"
 >
-  <span data-save-icon aria-hidden="true">＋</span><span data-save-label>旅リストに追加</span>
+  <span data-save-icon aria-hidden="true">＋</span><span data-save-label>{labels.add}</span>
 </button>
